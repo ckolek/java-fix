@@ -1,0 +1,3 @@
+rootProject.name = 'fix'
+
+include 'fix-core', 'fix-engine', 'fix-engine-quickfixj', 'fix-repository', 'fix-serialization'

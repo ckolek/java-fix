@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":fix-engine-quickfixj" external.linked.project.path="$MODULE_DIR$/../../../fix-engine-quickfixj" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="me.kolek.fix" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/out/production/classes" />
+    <output-test url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/out/test/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../fix-engine-quickfixj">
+      <sourceFolder url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../fix-engine-quickfixj/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="fix-engine" scope="PROVIDED" />
+    <orderEntry type="module" module-name="fix-core" scope="PROVIDED" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:19.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.quickfixj:quickfixj-core:1.6.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: me.kolek:util:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.mina:mina-core:2.0.16" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.slf4j:slf4j-api:1.7.21" level="project" />
+    <orderEntry type="module" module-name="fix-engine" scope="RUNTIME" />
+    <orderEntry type="module" module-name="fix-core" scope="RUNTIME" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:guava:19.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.quickfixj:quickfixj-core:1.6.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: me.kolek:util:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.mina:mina-core:2.0.16" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-api:1.7.21" level="project" />
+    <orderEntry type="module" module-name="fix-engine" scope="TEST" />
+    <orderEntry type="module" module-name="fix-core" scope="TEST" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.guava:guava:19.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.quickfixj:quickfixj-core:1.6.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: me.kolek:util:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.mina:mina-core:2.0.16" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.slf4j:slf4j-api:1.7.21" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+  </component>
+</module>

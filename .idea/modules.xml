@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fix.iml" filepath="$PROJECT_DIR$/.idea/modules/fix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fix-core/fix-core.iml" filepath="$PROJECT_DIR$/.idea/modules/fix-core/fix-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fix-engine/fix-engine.iml" filepath="$PROJECT_DIR$/.idea/modules/fix-engine/fix-engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fix-engine-quickfixj/fix-engine-quickfixj.iml" filepath="$PROJECT_DIR$/.idea/modules/fix-engine-quickfixj/fix-engine-quickfixj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fix-repository/fix-repository.iml" filepath="$PROJECT_DIR$/.idea/modules/fix-repository/fix-repository.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fix-serialization/fix-serialization.iml" filepath="$PROJECT_DIR$/.idea/modules/fix-serialization/fix-serialization.iml" />
+    </modules>
+  </component>
+</project>
