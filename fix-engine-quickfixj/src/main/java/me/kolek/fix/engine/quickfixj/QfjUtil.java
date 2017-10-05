@@ -1,30 +1,30 @@
 package me.kolek.fix.engine.quickfixj;
 
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
+import me.kolek.fix.FixDictionary;
+import me.kolek.fix.FixMessage;
+import me.kolek.fix.TagValue;
+import me.kolek.fix.engine.FixSessionId;
 import me.kolek.fix.engine.config.FixSessionConfiguration;
 import me.kolek.util.CollectionUtil;
 import me.kolek.util.tuple.Tuple2;
 import quickfix.*;
 
+import java.util.ListIterator;
+
 public enum QfjUtil {
     ;
 
-    public static SessionID toSessionId(FixSessionConfiguration sessionConfiguration) {
-        return new SessionID(sessionConfiguration.getBeginString(), sessionConfiguration.getSenderCompId(),
-                sessionConfiguration.getSenderSubId(), sessionConfiguration.getSenderLocationId(),
-                sessionConfiguration.getTargetCompId(), sessionConfiguration.getTargetSubId(),
-                sessionConfiguration.getTargetLocationId(), sessionConfiguration.getSessionId());
-    }
-
     public static Dictionary toSessionSettings(FixSessionConfiguration sessionConfiguration) {
         Dictionary dictionary = new Dictionary();
-        setString(dictionary, SessionSettings.BEGINSTRING, sessionConfiguration.getBeginString());
-        setString(dictionary, SessionSettings.SENDERCOMPID, sessionConfiguration.getSenderCompId());
-        setString(dictionary, SessionSettings.SENDERSUBID, sessionConfiguration.getSenderSubId());
-        setString(dictionary, SessionSettings.SENDERLOCID, sessionConfiguration.getSenderLocationId());
-        setString(dictionary, SessionSettings.TARGETCOMPID, sessionConfiguration.getTargetCompId());
-        setString(dictionary, SessionSettings.TARGETSUBID, sessionConfiguration.getTargetSubId());
-        setString(dictionary, SessionSettings.TARGETLOCID, sessionConfiguration.getTargetLocationId());
-        setString(dictionary, SessionSettings.SESSION_QUALIFIER, sessionConfiguration.getSessionId());
+        setString(dictionary, SessionSettings.BEGINSTRING, sessionConfiguration.getSessionId().getBeginString());
+        setString(dictionary, SessionSettings.SENDERCOMPID, sessionConfiguration.getSessionId().getSenderCompId());
+        setString(dictionary, SessionSettings.SENDERSUBID, sessionConfiguration.getSessionId().getSenderSubId());
+        setString(dictionary, SessionSettings.SENDERLOCID, sessionConfiguration.getSessionId().getSenderLocationId());
+        setString(dictionary, SessionSettings.TARGETCOMPID, sessionConfiguration.getSessionId().getTargetCompId());
+        setString(dictionary, SessionSettings.TARGETSUBID, sessionConfiguration.getSessionId().getTargetSubId());
+        setString(dictionary, SessionSettings.TARGETLOCID, sessionConfiguration.getSessionId().getTargetLocationId());
         setString(dictionary, Session.SETTING_DEFAULT_APPL_VER_ID, sessionConfiguration.getDefaultApplVerId());
         setString(dictionary, Session.SETTING_START_TIME, "00:00:00");
         setString(dictionary, Session.SETTING_END_TIME, "00:00:00");
@@ -62,6 +62,64 @@ public enum QfjUtil {
     public static void setLong(Dictionary dictionary, String key, Number value) {
         if (value != null) {
             dictionary.setString(key, value.toString());
+        }
+    }
+
+    public static SessionID toSessionID(FixSessionId fixSessionId) {
+        return new SessionID(fixSessionId.getBeginString(), fixSessionId.getSenderCompId(),
+                fixSessionId.getSenderSubId(), fixSessionId.getSenderLocationId(), fixSessionId.getTargetCompId(),
+                fixSessionId.getTargetSubId(), fixSessionId.getTargetLocationId(), null);
+    }
+
+    public static FixSessionId toFixSessionId(SessionID sessionID) {
+        return new FixSessionId(sessionID.getBeginString(), sessionID.getSenderCompID(), sessionID.getSenderSubID(),
+                sessionID.getSenderLocationID(), sessionID.getTargetCompID(), sessionID.getTargetSubID(),
+                sessionID.getTargetLocationID());
+    }
+
+    public static Message toMessage(FixDictionary dictionary, FixMessage fixMessage) {
+        Message message = new Message();
+
+        for (ListIterator<TagValue> iter = fixMessage.listIterator(); iter.hasNext();) {
+            TagValue tagValue = iter.next();
+            if (QfjMessage.isHeaderField(tagValue.getTagNum())) {
+                setField(dictionary, iter, tagValue, message.getHeader());
+            } else if (QfjMessage.isTrailerField(tagValue.getTagNum())) {
+                setField(dictionary, iter, tagValue, message.getTrailer());
+            } else {
+                setField(dictionary, iter, tagValue, message);
+            }
+        }
+
+        return message;
+    }
+
+    private static void setField(FixDictionary dictionary, ListIterator<TagValue> iter, TagValue tagValue,
+            FieldMap fields) {
+        fields.setString(tagValue.getTagNum(), tagValue.getValue());
+
+        if (dictionary.isGroup(tagValue.getTagNum())) {
+            int groupTagNum = tagValue.getTagNum();
+            int[] groupTagNums = dictionary.getTagNums(tagValue.getTagNum());
+            int firstTagNum = groupTagNums[0];
+
+            TIntSet _groupTagNums = new TIntHashSet(groupTagNums);
+            Group group = new Group(groupTagNum, firstTagNum);
+
+            while (iter.hasNext()) {
+                tagValue = iter.next();
+                if (!_groupTagNums.contains(tagValue.getTagNum())) {
+                    iter.previous();
+                    break;
+                }
+                if (group.isSetField(tagValue.getTagNum())) {
+                    fields.addGroup(group);
+                    group = new Group(groupTagNum, firstTagNum);
+                }
+                setField(dictionary, iter, tagValue, group);
+            }
+
+            fields.addGroup(group);
         }
     }
 }

@@ -1,5 +1,7 @@
 package me.kolek.fix.engine.config;
 
+import me.kolek.fix.engine.FixSessionId;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Consumer;
@@ -10,7 +12,7 @@ public class FixEngineConfiguration implements Serializable {
     private final String acceptorHost;
     private final Integer acceptorPort;
 
-    private final Map<String, FixSessionConfiguration> sessions;
+    private final Map<FixSessionId, FixSessionConfiguration> sessions;
 
     public FixEngineConfiguration(String acceptorHost, Integer acceptorPort,
             Collection<FixSessionConfiguration> sessions) {

@@ -1,8 +1,6 @@
 package me.kolek.fix.engine.quickfixj;
 
-import me.kolek.fix.engine.FixEngine;
-import me.kolek.fix.engine.FixEngineException;
-import me.kolek.fix.engine.FixEngineFactory;
+import me.kolek.fix.engine.*;
 import me.kolek.fix.engine.config.FixEngineConfiguration;
 import me.kolek.fix.engine.config.FixSessionConfiguration;
 import me.kolek.util.tuple.Tuple;
@@ -25,20 +23,21 @@ class QfjFixEngineFactory extends UnicastRemoteObject implements FixEngineFactor
         super(port);
     }
 
-    public void setMessageStoreDir(File messageStoreDir) throws IOException {
+    void setMessageStoreDir(File messageStoreDir) throws IOException {
         if (!(this.messageStoreDir = messageStoreDir).exists() && !this.messageStoreDir.mkdirs()) {
             throw new IOException("failed to create message store directory: " + messageStoreDir);
         }
     }
 
-    public void setLogDir(File logDir) throws IOException {
+    void setLogDir(File logDir) throws IOException {
         if (!(this.logDir = logDir).exists() && !this.logDir.mkdirs()) {
             throw new IOException("failed to create log directory: " + logDir);
         }
     }
 
     @Override
-    public FixEngine launchEngine(FixEngineConfiguration configuration) throws RemoteException {
+    public FixEngine launchEngine(FixEngineConfiguration configuration, FixDictionaryProvider dictionaryProvider,
+            FixEngineCallback callback) throws RemoteException {
         if (engine != null) {
             if (this.configuration != null && this.configuration.equals(configuration)) {
                 return engine;
@@ -56,7 +55,7 @@ class QfjFixEngineFactory extends UnicastRemoteObject implements FixEngineFactor
             MessageStoreFactory messageStoreFactory = getMessageStoreFactory(settings);
             LogFactory logFactory = getLogFactory(settings);
             MessageFactory messageFactory = getMessageFactory(settings);
-            this.engine = new QfjFixEngine(
+            this.engine = new QfjFixEngine(dictionaryProvider, callback,
                     app -> result.second() ? new SocketInitiator(app, messageStoreFactory, settings, logFactory,
                             messageFactory) : null,
                     app -> result.third() ? new SocketAcceptor(app, messageStoreFactory, settings, logFactory,
@@ -64,8 +63,7 @@ class QfjFixEngineFactory extends UnicastRemoteObject implements FixEngineFactor
             this.configuration = configuration;
             return this.engine;
         } catch (quickfix.RuntimeError | ConfigError e) {
-            e.printStackTrace();
-            throw new FixEngineException("failed to create engine: " + e.getMessage());
+            throw new FixEngineException("failed to create engine", e);
         }
     }
 
@@ -82,7 +80,7 @@ class QfjFixEngineFactory extends UnicastRemoteObject implements FixEngineFactor
         boolean hasInitiator = false, hasAcceptor = false;
         for (FixSessionConfiguration sessionConfiguration : configuration.getSessions()) {
             Dictionary dictionary = QfjUtil.toSessionSettings(sessionConfiguration);
-            settings.set(QfjUtil.toSessionId(sessionConfiguration), dictionary);
+            settings.set(QfjUtil.toSessionID(sessionConfiguration.getSessionId()), dictionary);
             if (sessionConfiguration.isAcceptor()) {
                 hasAcceptor = true;
             } else {

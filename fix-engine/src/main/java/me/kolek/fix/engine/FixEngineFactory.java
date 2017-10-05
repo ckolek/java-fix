@@ -6,5 +6,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface FixEngineFactory extends Remote {
-    FixEngine launchEngine(FixEngineConfiguration configuration) throws RemoteException;
+    FixEngine launchEngine(FixEngineConfiguration configuration, FixDictionaryProvider dictionaryProvider,
+            FixEngineCallback callback) throws RemoteException;
 }

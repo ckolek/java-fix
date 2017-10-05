@@ -1,5 +1,7 @@
 package me.kolek.fix;
 
+import me.kolek.fix.constants.TagNum;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,6 +52,42 @@ public class FixMessage implements Iterable<TagValue>, Serializable {
             }
         }
         return Optional.empty();
+    }
+
+    public Optional<String> getBeginString() {
+        return getValue(TagNum.BeginString);
+    }
+
+    public Optional<String> getMsgType() {
+        return getValue(TagNum.MsgType);
+    }
+
+    public Optional<String> getSenderCompID() {
+        return getValue(TagNum.SenderCompID);
+    }
+
+    public Optional<String> getSenderSubID() {
+        return getValue(TagNum.SenderSubID);
+    }
+
+    public Optional<String> getSenderLocationID() {
+        return getValue(TagNum.SenderLocationID);
+    }
+
+    public Optional<String> getTargetCompID() {
+        return getValue(TagNum.TargetCompID);
+    }
+
+    public Optional<String> getTargetSubID() {
+        return getValue(TagNum.TargetSubID);
+    }
+
+    public Optional<String> getTargetLocationID() {
+        return getValue(TagNum.TargetLocationID);
+    }
+
+    public Optional<String> getCheckSum() {
+        return getValue(TagNum.CheckSum);
     }
 
     public TagValue remove(int index) {

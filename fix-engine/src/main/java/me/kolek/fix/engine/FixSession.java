@@ -6,21 +6,11 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface FixSession extends Remote {
-    String getSessionId() throws RemoteException;
+    FixSessionId getSessionId() throws RemoteException;
 
-    String getBeginString() throws RemoteException;
+    void registerListener(FixSessionListener listener) throws RemoteException;
 
-    String getTargetCompId() throws RemoteException;
-
-    String getTargetSubId() throws RemoteException;
-
-    String getTargetLocationId() throws RemoteException;
-
-    String getSenderCompId() throws RemoteException;
-
-    String getSenderSubId() throws RemoteException;
-
-    String getSenderLocationId() throws RemoteException;
+    void unregisterListener() throws RemoteException;
 
     void logon() throws RemoteException;
 

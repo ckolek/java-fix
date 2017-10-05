@@ -1,5 +1,6 @@
 package me.kolek.fix.engine.config;
 
+import me.kolek.fix.engine.FixSessionId;
 import me.kolek.util.tuple.Tuple;
 import me.kolek.util.tuple.Tuple2;
 
@@ -12,31 +13,16 @@ import java.util.function.Consumer;
 
 public class FixSessionConfiguration implements Serializable {
     private final boolean acceptor;
-    private final String sessionId;
-    private final String beginString;
+    private final FixSessionId sessionId;
     private final String defaultApplVerId;
-    private final String senderCompId;
-    private final String senderSubId;
-    private final String senderLocationId;
-    private final String targetCompId;
-    private final String targetSubId;
-    private final String targetLocationId;
     private final List<Tuple2<String, Integer>> addresses;
     private final Integer heartbeatInterval;
 
-    public FixSessionConfiguration(boolean acceptor, String sessionId, String beginString, String defaultApplVerId,
-            String senderCompId, String senderSubId, String senderLocationId, String targetCompId, String targetSubId,
-            String targetLocationId, List<Tuple2<String, Integer>> addresses, Integer heartbeatInterval) {
+    public FixSessionConfiguration(boolean acceptor, FixSessionId sessionId, String defaultApplVerId, List<Tuple2<String, Integer>> addresses,
+            Integer heartbeatInterval) {
         this.acceptor = acceptor;
         this.sessionId = sessionId;
-        this.beginString = beginString;
         this.defaultApplVerId = defaultApplVerId;
-        this.targetCompId = targetCompId;
-        this.targetSubId = targetSubId;
-        this.targetLocationId = targetLocationId;
-        this.senderCompId = senderCompId;
-        this.senderSubId = senderSubId;
-        this.senderLocationId = senderLocationId;
         this.addresses = Collections.unmodifiableList(addresses);
         this.heartbeatInterval = heartbeatInterval;
     }
@@ -51,40 +37,12 @@ public class FixSessionConfiguration implements Serializable {
         return acceptor;
     }
 
-    public String getSessionId() {
+    public FixSessionId getSessionId() {
         return sessionId;
-    }
-
-    public String getBeginString() {
-        return beginString;
     }
 
     public String getDefaultApplVerId() {
         return defaultApplVerId;
-    }
-
-    public String getSenderCompId() {
-        return senderCompId;
-    }
-
-    public String getSenderSubId() {
-        return senderSubId;
-    }
-
-    public String getSenderLocationId() {
-        return senderLocationId;
-    }
-
-    public String getTargetCompId() {
-        return targetCompId;
-    }
-
-    public String getTargetSubId() {
-        return targetSubId;
-    }
-
-    public String getTargetLocationId() {
-        return targetLocationId;
     }
 
     public List<Tuple2<String, Integer>> getAddresses() {
@@ -97,8 +55,7 @@ public class FixSessionConfiguration implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(sessionId, beginString, defaultApplVerId, senderCompId, senderSubId, senderLocationId,
-                targetCompId, targetSubId, targetLocationId, addresses, heartbeatInterval);
+        return Objects.hash(acceptor, sessionId, defaultApplVerId, addresses, heartbeatInterval);
     }
 
     @Override
@@ -113,30 +70,16 @@ public class FixSessionConfiguration implements Serializable {
 
         FixSessionConfiguration other = (FixSessionConfiguration) obj;
         return (this.acceptor == other.acceptor) && Objects.equals(this.sessionId, other.sessionId) &&
-                Objects.equals(this.beginString, other.beginString) &&
                 Objects.equals(this.defaultApplVerId, other.defaultApplVerId) &&
-                Objects.equals(this.senderCompId, other.senderCompId) &&
-                Objects.equals(this.senderSubId, other.senderSubId) &&
-                Objects.equals(this.senderLocationId, other.senderLocationId) &&
-                Objects.equals(this.targetCompId, other.targetCompId) &&
-                Objects.equals(this.targetSubId, other.targetSubId) &&
-                Objects.equals(this.targetLocationId, other.targetLocationId) &&
                 Objects.equals(this.addresses, other.addresses) &&
                 Objects.equals(this.heartbeatInterval, other.heartbeatInterval);
     }
 
     public static class Builder {
-        private final List<Tuple2<String, Integer>> addresses = new ArrayList<>();
         private boolean acceptor;
-        private String sessionId;
-        private String beginString;
+        private FixSessionId sessionId;
         private String defaultApplVerId;
-        private String senderCompId;
-        private String senderSubId;
-        private String senderLocationId;
-        private String targetCompId;
-        private String targetSubId;
-        private String targetLocationId;
+        private final List<Tuple2<String, Integer>> addresses = new ArrayList<>();
         private int heartbeatInterval;
 
         public Builder acceptor() {
@@ -149,14 +92,13 @@ public class FixSessionConfiguration implements Serializable {
             return this;
         }
 
-        public Builder sessionId(String sessionId) {
+        public Builder sessionId(FixSessionId sessionId) {
             this.sessionId = sessionId;
             return this;
         }
 
-        public Builder beginString(String beginString) {
-            this.beginString = beginString;
-            return this;
+        public Builder sessionId(Consumer<FixSessionId.Builder> builderConsumer) {
+            return sessionId(FixSessionId.build(builderConsumer));
         }
 
         public Builder defaultApplVerId(String defaultApplVerId) {
@@ -164,38 +106,8 @@ public class FixSessionConfiguration implements Serializable {
             return this;
         }
 
-        public Builder senderCompId(String senderCompId) {
-            this.senderCompId = senderCompId;
-            return this;
-        }
-
-        public Builder senderSubId(String senderSubId) {
-            this.senderSubId = senderSubId;
-            return this;
-        }
-
-        public Builder senderLocationId(String senderLocationId) {
-            this.senderLocationId = senderLocationId;
-            return this;
-        }
-
-        public Builder targetCompId(String targetCompId) {
-            this.targetCompId = targetCompId;
-            return this;
-        }
-
-        public Builder targetSubId(String targetSubId) {
-            this.targetSubId = targetSubId;
-            return this;
-        }
-
-        public Builder targetLocationId(String targetLocationId) {
-            this.targetLocationId = targetLocationId;
-            return this;
-        }
-
         public Builder address(String host, Integer port) {
-            addresses.add(Tuple.of(host, port));
+            this.addresses.add(Tuple.of(host, port));
             return this;
         }
 
@@ -205,9 +117,7 @@ public class FixSessionConfiguration implements Serializable {
         }
 
         public FixSessionConfiguration build() {
-            return new FixSessionConfiguration(acceptor, sessionId, beginString, defaultApplVerId, senderCompId,
-                    senderSubId, senderLocationId, targetCompId, targetSubId, targetLocationId, addresses,
-                    heartbeatInterval);
+            return new FixSessionConfiguration(acceptor, sessionId, defaultApplVerId, addresses, heartbeatInterval);
         }
     }
 }

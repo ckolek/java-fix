@@ -4,7 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface FixEngine extends Remote {
-    FixSession getSession(String sessionId) throws RemoteException;
+    FixSession getSession(FixSessionId sessionId) throws RemoteException;
 
     void shutdown() throws RemoteException;
 }

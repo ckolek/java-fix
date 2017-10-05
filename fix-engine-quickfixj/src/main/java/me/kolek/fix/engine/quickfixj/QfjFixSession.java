@@ -1,9 +1,11 @@
 package me.kolek.fix.engine.quickfixj;
 
+import me.kolek.fix.FixDictionary;
 import me.kolek.fix.FixMessage;
-import me.kolek.fix.engine.FixEngineException;
-import me.kolek.fix.engine.FixSession;
-import quickfix.InvalidMessage;
+import me.kolek.fix.constants.TagNum;
+import me.kolek.fix.engine.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import quickfix.Session;
 import quickfix.SessionID;
 
@@ -12,52 +14,34 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 class QfjFixSession extends UnicastRemoteObject implements FixSession {
-    private final SessionID sessionId;
+    private static final Logger logger = LoggerFactory.getLogger(QfjFixSession.class);
+
+    private final FixSessionId sessionId;
     private final Session session;
 
-    QfjFixSession(SessionID sessionId, Session session) throws RemoteException {
-        this.sessionId = sessionId;
+    private final FixDictionaryProvider dictionaryProvider;
+
+    private FixSessionListener listener;
+
+    QfjFixSession(SessionID sessionId, Session session, FixDictionaryProvider dictionaryProvider) throws RemoteException {
+        this.sessionId = QfjUtil.toFixSessionId(sessionId);
         this.session = session;
+        this.dictionaryProvider = dictionaryProvider;
     }
 
     @Override
-    public String getSessionId() {
-        return sessionId.getSessionQualifier();
+    public FixSessionId getSessionId() {
+        return sessionId;
     }
 
     @Override
-    public String getBeginString() throws RemoteException {
-        return sessionId.getBeginString();
+    public void registerListener(FixSessionListener listener) throws RemoteException {
+        this.listener = listener;
     }
 
     @Override
-    public String getTargetCompId() throws RemoteException {
-        return sessionId.getTargetCompID();
-    }
-
-    @Override
-    public String getTargetSubId() throws RemoteException {
-        return sessionId.getTargetSubID();
-    }
-
-    @Override
-    public String getTargetLocationId() throws RemoteException {
-        return sessionId.getTargetLocationID();
-    }
-
-    @Override
-    public String getSenderCompId() throws RemoteException {
-        return sessionId.getSenderCompID();
-    }
-
-    @Override
-    public String getSenderSubId() throws RemoteException {
-        return sessionId.getSenderSubID();
-    }
-
-    @Override
-    public String getSenderLocationId() throws RemoteException {
-        return sessionId.getSenderLocationID();
+    public void unregisterListener() throws RemoteException {
+        this.listener = null;
     }
 
     @Override
@@ -109,10 +93,77 @@ class QfjFixSession extends UnicastRemoteObject implements FixSession {
 
     @Override
     public boolean send(FixMessage message) throws RemoteException {
-        try {
-            return session.send(new QfjMessage(message));
-        } catch (InvalidMessage e) {
-            throw new FixEngineException("invalid message: " + e.getMessage());
+        String beginString = message.getBeginString()
+                .orElseThrow(() -> new FixEngineException("message must have a BeginString value"));
+        String applVerId;
+        if (beginString.startsWith("FIXT")) {
+            applVerId = message.getValue(TagNum.ApplVerID).orElse(null);
+        } else {
+            applVerId = null;
+        }
+
+        FixDictionary dictionary = dictionaryProvider.getDictionary(sessionId, applVerId);
+
+        return session.send(QfjUtil.toMessage(dictionary, message));
+    }
+
+    void fireOnLogon() {
+        if (listener != null) {
+            try {
+                listener.onLogon();
+            } catch (RemoteException e) {
+                logger.error("failed to notify listener of logon", e);
+            }
+        }
+    }
+
+    void fireOnLogout() {
+        if (listener != null) {
+            try {
+                listener.onLogout();
+            } catch (RemoteException e) {
+                logger.error("failed to notify listener of logout", e);
+            }
+        }
+    }
+
+    void fireOnReset() {
+        if (listener != null) {
+            try {
+                listener.onReset();
+            } catch (RemoteException e) {
+                logger.error("failed to notify listener of reset", e);
+            }
+        }
+    }
+
+    void fireOnMessageSent(FixMessage message) {
+        if (listener != null) {
+            try {
+                listener.onMessageSent(message);
+            } catch (RemoteException e) {
+                logger.error("failed to notify listener of message sent", e);
+            }
+        }
+    }
+
+    void fireOnMessageReceived(FixMessage message) {
+        if (listener != null) {
+            try {
+                listener.onMessageReceived(message);
+            } catch (RemoteException e) {
+                logger.error("failed to notify listener of message received", e);
+            }
+        }
+    }
+
+    void fireOnException(Throwable cause) {
+        if (listener != null) {
+            try {
+                listener.onException(cause);
+            } catch (RemoteException e) {
+                logger.error("failed to notify listener of exception", e);
+            }
         }
     }
 }
