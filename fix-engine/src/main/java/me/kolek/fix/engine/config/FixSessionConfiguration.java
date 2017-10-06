@@ -80,7 +80,7 @@ public class FixSessionConfiguration implements Serializable {
         private FixSessionId sessionId;
         private String defaultApplVerId;
         private final List<Tuple2<String, Integer>> addresses = new ArrayList<>();
-        private int heartbeatInterval;
+        private Integer heartbeatInterval;
 
         public Builder acceptor() {
             this.acceptor = true;
@@ -111,7 +111,7 @@ public class FixSessionConfiguration implements Serializable {
             return this;
         }
 
-        public Builder heartbeatInterval(int heartbeatInterval) {
+        public Builder heartbeatInterval(Integer heartbeatInterval) {
             this.heartbeatInterval = heartbeatInterval;
             return this;
         }
