@@ -1,6 +1,9 @@
 package me.kolek.fix.engine;
 
+import me.kolek.util.ObjectUtil;
+
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class FixSessionId implements Serializable {
@@ -51,6 +54,19 @@ public class FixSessionId implements Serializable {
         return targetLocationId;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(beginString, senderCompId, senderSubId, senderLocationId, targetCompId, targetSubId,
+                targetLocationId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ObjectUtil.equals(this, obj, FixSessionId::getBeginString, FixSessionId::getSenderCompId,
+                FixSessionId::getSenderSubId, FixSessionId::getSenderLocationId, FixSessionId::getTargetCompId,
+                FixSessionId::getTargetSubId, FixSessionId::getTargetLocationId);
+    }
+
     public static FixSessionId build(Consumer<Builder> builderConsumer) {
         Builder builder = new Builder();
         builderConsumer.accept(builder);
@@ -86,6 +102,13 @@ public class FixSessionId implements Serializable {
             return this;
         }
 
+        public Builder sender(String compId, String subId, String locationId) {
+            this.senderCompId = compId;
+            this.senderSubId = subId;
+            this.senderLocationId = locationId;
+            return this;
+        }
+
         public Builder targetCompId(String targetCompId) {
             this.targetCompId = targetCompId;
             return this;
@@ -98,6 +121,13 @@ public class FixSessionId implements Serializable {
 
         public Builder targetLocationId(String targetLocationId) {
             this.targetLocationId = targetLocationId;
+            return this;
+        }
+
+        public Builder target(String compId, String subId, String locationId) {
+            this.targetCompId = compId;
+            this.targetSubId = subId;
+            this.targetLocationId = locationId;
             return this;
         }
 

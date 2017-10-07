@@ -1,6 +1,7 @@
 package me.kolek.fix.engine.config;
 
 import me.kolek.fix.engine.FixSessionId;
+import me.kolek.util.ObjectUtil;
 
 import java.io.Serializable;
 import java.util.*;
@@ -51,17 +52,9 @@ public class FixEngineConfiguration implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj == null) {
-            return false;
-        } else if (obj.getClass() != FixEngineConfiguration.class) {
-            return false;
-        }
-
-        FixEngineConfiguration other = (FixEngineConfiguration) obj;
-        return Objects.equals(this.acceptorHost, other.acceptorHost) &&
-                Objects.equals(this.acceptorPort, other.acceptorPort) && this.sessions.equals(other.sessions);
+        return ObjectUtil
+                .equals(this, obj, FixEngineConfiguration::getAcceptorHost, FixEngineConfiguration::getAcceptorPort,
+                        FixEngineConfiguration::getSessions);
     }
 
     public static class Builder {

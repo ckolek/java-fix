@@ -46,7 +46,7 @@ public class FixSessionIdDeserializer extends JsonDeserializer<FixSessionId> {
         }
 
         public void setTargetLocationId(String targetSubId) {
-            delegate.targetSubId(targetSubId);
+            delegate.targetLocationId(targetSubId);
         }
     }
 }

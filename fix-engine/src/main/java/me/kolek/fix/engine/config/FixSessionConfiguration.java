@@ -1,6 +1,7 @@
 package me.kolek.fix.engine.config;
 
 import me.kolek.fix.engine.FixSessionId;
+import me.kolek.util.ObjectUtil;
 import me.kolek.util.tuple.Tuple;
 import me.kolek.util.tuple.Tuple2;
 
@@ -60,19 +61,9 @@ public class FixSessionConfiguration implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj == null) {
-            return false;
-        } else if (obj.getClass() != FixSessionConfiguration.class) {
-            return false;
-        }
-
-        FixSessionConfiguration other = (FixSessionConfiguration) obj;
-        return (this.acceptor == other.acceptor) && Objects.equals(this.sessionId, other.sessionId) &&
-                Objects.equals(this.defaultApplVerId, other.defaultApplVerId) &&
-                Objects.equals(this.addresses, other.addresses) &&
-                Objects.equals(this.heartbeatInterval, other.heartbeatInterval);
+        return ObjectUtil.equals(this, obj, FixSessionConfiguration::isAcceptor, FixSessionConfiguration::getSessionId,
+                FixSessionConfiguration::getDefaultApplVerId, FixSessionConfiguration::getAddresses,
+                FixSessionConfiguration::getHeartbeatInterval);
     }
 
     public static class Builder {

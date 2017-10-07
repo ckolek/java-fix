@@ -16,7 +16,8 @@ public class FixEngineConfigurationDeserializer extends JsonDeserializer<FixEngi
     @Override
     public FixEngineConfiguration deserialize(JsonParser p, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
-        return null;
+        DelegateBuilder builder = ctxt.readValue(p, DelegateBuilder.class);
+        return builder.delegate.build();
     }
 
     private static class DelegateBuilder {

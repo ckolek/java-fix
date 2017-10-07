@@ -14,6 +14,7 @@ public class FixSessionConfigurationSerializer extends JsonSerializer<FixSession
     @Override
     public void serialize(FixSessionConfiguration value, JsonGenerator gen, SerializerProvider serializers)
             throws IOException {
+        gen.writeStartObject();
         gen.writeBooleanField("acceptor", value.isAcceptor());
         gen.writeObjectField("sessionId", value.getSessionId());
         gen.writeStringField("defaultApplVerId", value.getDefaultApplVerId());
@@ -30,5 +31,6 @@ public class FixSessionConfigurationSerializer extends JsonSerializer<FixSession
         if (value.getHeartbeatInterval() != null) {
             gen.writeObjectField("heartbeatInterval", value.getHeartbeatInterval());
         }
+        gen.writeEndObject();
     }
 }
