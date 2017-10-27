@@ -18,6 +18,10 @@ public class RepositoryParser {
     }
 
     public Repository parse(File repoDir) throws Exception {
+        if (!repoDir.exists()) {
+            throw new Exception("repository directory " + repoDir + " does not exist");
+        }
+
         Datatypes datatypes = parseDatatypes(repoDir).orElseThrow(() -> new Exception("Datatypes file not found"));
         Messages messages = parseMessages(repoDir).orElseThrow(() -> new Exception("Messages file not found"));
         Components components = parseComponents(repoDir).orElseThrow(() -> new Exception("Components file not found"));
