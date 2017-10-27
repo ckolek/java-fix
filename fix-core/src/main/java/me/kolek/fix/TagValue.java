@@ -1,6 +1,7 @@
 package me.kolek.fix;
 
 import com.google.common.base.Strings;
+import me.kolek.fix.util.FixUtil;
 
 import java.io.Serializable;
 
@@ -28,6 +29,6 @@ public class TagValue implements Serializable {
 
     @Override
     public String toString() {
-        return tagNum + String.valueOf(SEPARATOR) + value;
+        return FixUtil.toString(this);
     }
 }

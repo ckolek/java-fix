@@ -1,10 +1,10 @@
 package me.kolek.fix;
 
 import me.kolek.fix.constants.TagNum;
+import me.kolek.fix.util.FixUtil;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FixMessage implements Iterable<TagValue>, Serializable {
     public static final char FIELD_DELIMITER = 0x01;
@@ -12,11 +12,11 @@ public class FixMessage implements Iterable<TagValue>, Serializable {
     private final List<TagValue> tagValues;
 
     public FixMessage() {
-        this.tagValues = new ArrayList<>();
+        this.tagValues = new LinkedList<>();
     }
 
     public FixMessage(List<TagValue> tagValues) {
-        this.tagValues = new ArrayList<>(tagValues);
+        this.tagValues = new LinkedList<>(tagValues);
     }
 
     public void add(int tag, String value) {
@@ -35,8 +35,31 @@ public class FixMessage implements Iterable<TagValue>, Serializable {
         tagValues.add(index, tagValue);
     }
 
+    public void addAll(Collection<TagValue> tagValues) {
+        this.tagValues.addAll(tagValues);
+    }
+
+    public void addAll(int index, Collection<TagValue> tagValues) {
+        this.tagValues.addAll(index, tagValues);
+    }
+
     public TagValue get(int index) {
         return tagValues.get(index);
+    }
+
+    public OptionalInt indexOf(int tagNum) {
+        return indexOf(tagNum, 0);
+    }
+
+    public OptionalInt indexOf(int tagNum, int index) {
+        int current = 0;
+        for (ListIterator<TagValue> iter = tagValues.listIterator(); iter.hasNext() && current <= index;) {
+            TagValue tagValue = iter.next();
+            if (tagValue.getTagNum() == tagNum && current++ == index) {
+                return OptionalInt.of(iter.previousIndex());
+            }
+        }
+        return OptionalInt.empty();
     }
 
     public Optional<String> getValue(int tagNum) {
@@ -44,18 +67,20 @@ public class FixMessage implements Iterable<TagValue>, Serializable {
     }
 
     public Optional<String> getValue(int tagNum, int index) {
-        int current = 0;
-        for (Iterator<TagValue> iter = tagValues.iterator(); iter.hasNext() && current <= index;) {
-            TagValue tagValue = iter.next();
-            if (tagValue.getTagNum() == tagNum && current++ == index) {
-                return Optional.of(tagValue.getValue());
-            }
+        OptionalInt fieldIndex = indexOf(tagNum, index);
+        if (fieldIndex.isPresent()) {
+            return Optional.of(tagValues.get(fieldIndex.getAsInt()).getValue());
+        } else {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     public Optional<String> getBeginString() {
         return getValue(TagNum.BeginString);
+    }
+
+    public Optional<String> getBodyLength() {
+        return getValue(TagNum.BodyLength);
     }
 
     public Optional<String> getMsgType() {
@@ -86,12 +111,28 @@ public class FixMessage implements Iterable<TagValue>, Serializable {
         return getValue(TagNum.TargetLocationID);
     }
 
+    public Optional<String> getMsgSeqNum() {
+        return getValue(TagNum.MsgSeqNum);
+    }
+
+    public Optional<String> getSendingTime() {
+        return getValue(TagNum.SendingTime);
+    }
+
     public Optional<String> getCheckSum() {
         return getValue(TagNum.CheckSum);
     }
 
     public TagValue remove(int index) {
         return tagValues.remove(index);
+    }
+
+    public boolean isEmpty() {
+        return tagValues.isEmpty();
+    }
+
+    public int size() {
+        return tagValues.size();
     }
 
     public void clear() {
@@ -113,7 +154,6 @@ public class FixMessage implements Iterable<TagValue>, Serializable {
 
     @Override
     public String toString() {
-        return tagValues.stream().map(Object::toString).map(field -> field + FIELD_DELIMITER)
-                .collect(Collectors.joining());
+        return FixUtil.toString(tagValues);
     }
 }

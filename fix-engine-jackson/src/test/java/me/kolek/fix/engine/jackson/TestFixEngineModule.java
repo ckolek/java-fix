@@ -23,7 +23,7 @@ public class TestFixEngineModule {
         configuration = FixEngineConfiguration.build(engine -> {
             engine.acceptorHost("engine-host1").acceptorPort(8001);
             engine.session(session -> {
-                session.acceptor().sessionId(id -> id.beginString(BeginString.FIXT11).sender("SENDR44", "DESK1", "1F")
+                session.acceptor().sessionId(id -> id.beginString(BeginString._FIXT11).sender("SENDR44", "DESK1", "1F")
                         .target("RECV44", "DESK2", "0A")).defaultApplVerId("6").address("localhost", 8002)
                         .address("localhost", 8003);
             });

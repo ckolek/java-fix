@@ -1,44 +1,73 @@
 package me.kolek.fix.util;
 
+import me.kolek.fix.FixMessage;
+import me.kolek.fix.TagValue;
 import me.kolek.fix.constants.ApplVerId;
 import me.kolek.fix.constants.BeginString;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 public class FixUtil {
-    private static final Map<String, String> applVerIdToBeginString;
-    private static final Map<String, String> beginStringToApplVerId;
+    public static final DateTimeFormatter UTC_DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
+    public static final DateTimeFormatter UTC_TIME_ONLY_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss[.SSS]");
+    public static final DateTimeFormatter UTC_TIMESTAMP_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss[.SSS]");
 
-    static {
-        Map<String, String> _applVerIdToBeginString = new HashMap<>();
-        Map<String, String> _beginStringToApplVerId = new HashMap<>();
-        Arrays.stream(new String[][]{
-                {ApplVerId.FIX27, BeginString.FIX27},
-                {ApplVerId.FIX30, BeginString.FIX30},
-                {ApplVerId.FIX40, BeginString.FIX40},
-                {ApplVerId.FIX41, BeginString.FIX41},
-                {ApplVerId.FIX42, BeginString.FIX42},
-                {ApplVerId.FIX43, BeginString.FIX43},
-                {ApplVerId.FIX44, BeginString.FIX44},
-                {ApplVerId.FIX50, BeginString.FIX50},
-                {ApplVerId.FIX50SP1, BeginString.FIX50SP1},
-                {ApplVerId.FIX50SP2, BeginString.FIX50SP2},
-        }).forEach(applVerIdBeginString -> {
-            _applVerIdToBeginString.put(applVerIdBeginString[0], applVerIdBeginString[1]);
-            _beginStringToApplVerId.put(applVerIdBeginString[1], applVerIdBeginString[0]);
-        });
-        applVerIdToBeginString = Collections.unmodifiableMap(_applVerIdToBeginString);
-        beginStringToApplVerId = Collections.unmodifiableMap(_beginStringToApplVerId);
+    public static Optional<String> toBeginString(String applVerId) {
+        return ApplVerId.fromValue(applVerId).map(ApplVerId::getBeginString).map(BeginString::value);
     }
 
-    public static String toBeginString(String applVerId) {
-        return applVerIdToBeginString.get(applVerId);
+    public static Optional<String> toApplVerId(String beginString) {
+        return BeginString.fromValue(beginString).map(BeginString::getApplVerId).map(ApplVerId::value);
     }
 
-    public static String toApplVerId(String beginString) {
-        return beginStringToApplVerId.get(beginString);
+    public static String toString(TagValue tagValue) {
+        return append(new StringBuilder(), tagValue).toString();
+    }
+
+    public static StringBuilder append(StringBuilder string, TagValue tagValue) {
+        return string.append(tagValue.getTagNum()).append(TagValue.SEPARATOR).append(tagValue.getValue())
+                .append(FixMessage.FIELD_DELIMITER);
+    }
+
+    public static StringBuilder insert(StringBuilder string, int index, TagValue tagValue) {
+        return string.insert(index, FixMessage.FIELD_DELIMITER).insert(index, tagValue.getValue())
+                .insert(index, TagValue.SEPARATOR).insert(index, tagValue.getTagNum());
+    }
+
+    public static String toString(Iterable<TagValue> tagValues) {
+        return append(new StringBuilder(), tagValues).toString();
+    }
+
+    public static StringBuilder append(StringBuilder string, Iterable<TagValue> tagValues) {
+        tagValues.forEach(tv -> append(string, tv));
+        return string;
+    }
+
+    /**
+     * Calculates the expected value of the CheckSum(10) field from a raw FIX message. The message should contain the
+     * BeginString(8) and BodyLength(9) fields, but should not contain the CheckSum(10) field.
+     *
+     * @param message the raw FIX message
+     * @return the expected CheckSum(10) value
+     */
+    public static String calculateChecksum(CharSequence message) {
+        return String.format("%03d", message.chars().sum() % 256);
+    }
+
+    public static String formatUtcDateOnly(LocalDate date) {
+        return date.format(UTC_DATE_ONLY_FORMATTER);
+    }
+
+    public static String formatUtcTimeOnly(LocalTime time) {
+        return time.format(UTC_TIME_ONLY_FORMATTER);
+    }
+
+    public static String formatUtcTimestamp(LocalDateTime dateTime) {
+        return dateTime.format(UTC_TIMESTAMP_FORMATTER);
     }
 }
