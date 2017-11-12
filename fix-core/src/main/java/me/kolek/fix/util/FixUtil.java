@@ -4,6 +4,7 @@ import me.kolek.fix.FixMessage;
 import me.kolek.fix.TagValue;
 import me.kolek.fix.constants.ApplVerId;
 import me.kolek.fix.constants.BeginString;
+import me.kolek.fix.constants.TagNum;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +13,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class FixUtil {
+    public static final String BEGIN_STRING_START = Integer.toString(TagNum.BeginString) + TagValue.SEPARATOR;
+    public static final String BODY_LENGTH_START = Integer.toString(TagNum.BodyLength) + TagValue.SEPARATOR;
+    public static final String CHECK_SUM_START = Integer.toString(TagNum.CheckSum) + TagValue.SEPARATOR;
+
     public static final DateTimeFormatter UTC_DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
     public static final DateTimeFormatter UTC_TIME_ONLY_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss[.SSS]");
     public static final DateTimeFormatter UTC_TIMESTAMP_FORMATTER =
