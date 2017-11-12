@@ -2,7 +2,7 @@ package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.TagValue;
 import me.kolek.fix.serialization.Component;
-import me.kolek.util.WriterHelper;
+import me.kolek.util.io.WriterHelper;
 
 import java.io.IOException;
 import java.util.List;

@@ -10,8 +10,8 @@ import me.kolek.fix.TagValue;
 import me.kolek.fix.serialization.Component;
 import me.kolek.fix.serialization.Group;
 import me.kolek.fix.serialization.field.StringSerDes;
-import me.kolek.util.WriterHelper;
 import me.kolek.util.exception.CannotHappenException;
+import me.kolek.util.io.WriterHelper;
 
 import java.io.IOException;
 import java.io.StringWriter;

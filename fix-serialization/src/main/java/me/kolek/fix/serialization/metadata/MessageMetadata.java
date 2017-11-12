@@ -1,8 +1,8 @@
 package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.serialization.Message;
-import me.kolek.util.WriterHelper;
 import me.kolek.util.exception.CannotHappenException;
+import me.kolek.util.io.WriterHelper;
 
 import java.io.IOException;
 import java.io.StringWriter;

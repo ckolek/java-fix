@@ -4,7 +4,7 @@ import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import me.kolek.fix.TagValue;
 import me.kolek.fix.serialization.Group;
-import me.kolek.util.WriterHelper;
+import me.kolek.util.io.WriterHelper;
 
 import java.io.IOException;
 import java.util.Iterator;
