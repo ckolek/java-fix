@@ -9,7 +9,6 @@ import me.kolek.util.tuple.Tuple2;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 public class FixTestUtil {
     public static URL getResource(Class<?> clazz, String name) {
@@ -37,7 +36,7 @@ public class FixTestUtil {
     }
 
     public static String getResourceString(Class<?> clazz, String name) throws IOException {
-        return new String(getResourceData(clazz, name), StandardCharsets.UTF_8);
+        return new String(getResourceData(clazz, name), FixUtil.DEFAULT_CHARSET);
     }
 
     public static String[] getResourceComponents(Class<?> clazz, String name) throws IOException {

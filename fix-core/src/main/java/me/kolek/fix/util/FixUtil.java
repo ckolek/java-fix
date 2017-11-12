@@ -6,6 +6,8 @@ import me.kolek.fix.constants.ApplVerId;
 import me.kolek.fix.constants.BeginString;
 import me.kolek.fix.constants.TagNum;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class FixUtil {
+    public static final Charset DEFAULT_CHARSET = StandardCharsets.US_ASCII;
+
     public static final String BEGIN_STRING_START = Integer.toString(TagNum.BeginString) + TagValue.SEPARATOR;
     public static final String BODY_LENGTH_START = Integer.toString(TagNum.BodyLength) + TagValue.SEPARATOR;
     public static final String CHECK_SUM_START = Integer.toString(TagNum.CheckSum) + TagValue.SEPARATOR;
