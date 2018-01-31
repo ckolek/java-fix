@@ -1,8 +1,12 @@
 package me.kolek.fix.engine.runtime;
 
+import me.kolek.fix.FixDictionary;
 import me.kolek.fix.FixMessage;
 import me.kolek.fix.engine.*;
 import me.kolek.fix.engine.config.FixEngineConfiguration;
+import me.kolek.util.concurrent.LockUtil;
+import me.kolek.util.function.ThrowingConsumer;
+import me.kolek.util.function.ThrowingFunction;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -10,19 +14,17 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.TreeMap;
+import java.util.concurrent.locks.*;
 
 public class FixEngineProxy {
     private final String factoryAddress;
     private final FixEngineConfiguration configuration;
-    private final FixDictionaryProvider dictionaryProvider;
+    private final FixDictionary dictionary;
 
-    private final Lock lock;
+    private final ReadWriteLock lock;
     private final Condition condition;
 
     private FixEngine engine;
@@ -32,33 +34,36 @@ public class FixEngineProxy {
 
     private Thread connectionThread;
 
-    public FixEngineProxy(String factoryAddress, FixEngineConfiguration configuration,
-            FixDictionaryProvider dictionaryProvider) {
+    public FixEngineProxy(String factoryAddress, FixEngineConfiguration configuration, FixDictionary dictionary) {
         this.factoryAddress = factoryAddress;
         this.configuration = configuration;
-        this.dictionaryProvider = dictionaryProvider;
+        this.dictionary = dictionary;
 
-        this.lock = new ReentrantLock(true);
-        this.condition = lock.newCondition();
+        this.lock = new ReentrantReadWriteLock(false);
+        this.condition = lock.writeLock().newCondition();
 
-        this.sessions = new HashMap<>();
+        this.sessions = new TreeMap<>();
 
         this.listeners = new HashSet<>();
     }
 
-    public void initialize() {
+    public synchronized void initialize() {
+        if (connectionThread != null) {
+            throw new IllegalStateException("FIX engine proxy has already been initialized");
+        }
         connectionThread = new Thread(this::maintainConnection);
         connectionThread.start();
     }
 
-    public void destroy() {
-        if (connectionThread != null) {
-            connectionThread.interrupt();
-            try {
-                connectionThread.join();
-            } catch (InterruptedException e) {
-                // ignore
-            }
+    public synchronized void destroy() {
+        if (connectionThread == null) {
+            throw new IllegalStateException("FIX engine proxy has not been initialized");
+        }
+        connectionThread.interrupt();
+        try {
+            connectionThread.join();
+        } catch (InterruptedException e) {
+            // ignore
         }
         shutdown();
     }
@@ -71,100 +76,115 @@ public class FixEngineProxy {
         listeners.remove(listener);
     }
 
-    public String getBeginString(String sessionId) throws FixEngineException {
-        return null;
+    public Collection<FixSessionId> getSessionIds() {
+        return sessions.keySet();
     }
 
-    public String getTargetCompId(String sessionId) throws FixEngineException {
-        return null;
+    public void logon(FixSessionId sessionId) throws FixEngineException {
+        useSession(sessionId, FixSessionProxy::logon);
     }
 
-    public String getTargetSubId(String sessionId) throws FixEngineException {
-        return null;
+    public void logout(FixSessionId sessionId) throws FixEngineException {
+        useSession(sessionId, FixSessionProxy::logout);
     }
 
-    public String getTargetLocationId(String sessionId) throws FixEngineException {
-        return null;
+    public int getIncomingMsgSeqNum(FixSessionId sessionId) throws FixEngineException {
+        return useSession(sessionId, FixSessionProxy::getIncomingMsgSeqNum);
     }
 
-    public String getSenderCompId(String sessionId) throws FixEngineException {
-        return null;
+    public void setIncomingMsgSeqNum(FixSessionId sessionId, int msgSeqNum) throws FixEngineException {
+        useSession(sessionId, s -> { s.setIncomingMsgSeqNum(msgSeqNum); });
     }
 
-    public String getSenderSubId(String sessionId) throws FixEngineException {
-        return null;
+    public int getOutgoingMsgSeqNum(FixSessionId sessionId) throws FixEngineException {
+        return useSession(sessionId, FixSessionProxy::getOutgoingMsgSeqNum);
     }
 
-    public String getSenderLocationId(String sessionId) throws FixEngineException {
-        return null;
+    public void setOutgoingMsgSeqNum(FixSessionId sessionId, int msgSeqNum) throws FixEngineException {
+        useSession(sessionId, s -> { s.setOutgoingMsgSeqNum(msgSeqNum); });
     }
 
-    void logon(String sessionId) throws FixEngineException {
-
+    public void reset(FixSessionId sessionId) throws FixEngineException {
+        useSession(sessionId, FixSessionProxy::reset);
     }
 
-    void logout(String sessionId) throws FixEngineException {
-
+    public boolean send(FixSessionId sessionId, FixMessage message) throws FixEngineException {
+        return useSession(sessionId, s -> { return s.send(message); });
     }
 
-    int getIncomingMsgSeqNum(String sessionId) throws FixEngineException {
-        return 0;
+    private FixSessionProxy getSession(FixSessionId sessionId) throws FixEngineException {
+        if (engine == null) {
+            throw new FixEngineException("engine is not connected");
+        }
+        FixSessionProxy session = sessions.get(sessionId);
+        if (session == null) {
+            throw new FixEngineException("session with ID " + sessionId + " is not available");
+        }
+        return session;
     }
 
-    void setIncomingMsgSeqNum(String sessionId, int msgSeqNum) throws FixEngineException {
-
+    private void useSession(FixSessionId sessionId, ThrowingConsumer<FixSessionProxy, RemoteException> action)
+            throws FixEngineException {
+        try {
+            LockUtil.doLocked(lock.readLock(), () -> action.accept(getSession(sessionId)));
+        } catch (RemoteException e) {
+            throw handleException(e);
+        }
     }
 
-    int getOutgoingMsgSeqNum(String sessionId) throws FixEngineException {
-        return 0;
+    private <T> T useSession(FixSessionId sessionId, ThrowingFunction<FixSessionProxy, T, RemoteException> action)
+            throws FixEngineException {
+        try {
+            return LockUtil.doLocked(lock.readLock(), () -> action.apply(getSession(sessionId)));
+        } catch (RemoteException e) {
+            throw handleException(e);
+        }
     }
 
-    void setOutgoingMsgSeqNum(String sessionId, int msgSeqNum) throws FixEngineException {
-
-    }
-
-    void reset(String sessionId) throws FixEngineException {
-
-    }
-
-    boolean send(String sessionId, FixMessage message) throws FixEngineException {
-        return false;
+    private FixEngineException handleException(RemoteException cause) {
+        LockUtil.doLocked(lock.writeLock(), condition::signal);
+        if (cause instanceof FixEngineException) {
+            return (FixEngineException) cause;
+        } else {
+            return new FixEngineException(cause.getMessage());
+        }
     }
 
     private void shutdown() {
-        for (FixSessionProxy session : sessions.values()) {
+        LockUtil.doLocked(lock.writeLock(), () -> {
+            for (FixSessionProxy session : sessions.values()) {
+                try {
+                    session.destroy();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+            sessions.clear();
             try {
-                session.destroy();
+                engine.shutdown();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        }
-        sessions.clear();
-        try {
-            engine.shutdown();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        engine = null;
+            engine = null;
+        });
     }
 
     private void maintainConnection() {
         while (!Thread.interrupted()) {
             try {
-                try {
-                    lock.lock();
-                    if (engine != null) {
-                        condition.await();
+                LockUtil.doLocked(lock.writeLock(), () -> {
+                    try {
+                        if (engine != null) {
+                            condition.await();
+                        }
+                        shutdown();
+                        FixEngineFactory factory = (FixEngineFactory) Naming.lookup(factoryAddress);
+                        engine = factory.launchEngine(configuration, dictionary, new FixEngineProxyCallback());
+                    } catch (NotBoundException | MalformedURLException | RemoteException e) {
+                        e.printStackTrace();
+                        shutdown();
                     }
-                    shutdown();
-                    FixEngineFactory factory = (FixEngineFactory) Naming.lookup(factoryAddress);
-                    engine = factory.launchEngine(configuration, dictionaryProvider, new FixEngineProxyCallback());
-                } catch (NotBoundException | MalformedURLException | RemoteException e) {
-                    e.printStackTrace();
-                    shutdown();
-                } finally {
-                    lock.unlock();
-                }
+                });
             } catch (InterruptedException e) {
                 break;
             }
@@ -176,8 +196,10 @@ public class FixEngineProxy {
 
         @Override
         public void onSessionAvailable(FixSessionId sessionId) throws RemoteException {
-            FixSession session = engine.getSession(sessionId);
-            sessions.put(sessionId, new FixSessionProxy(sessionId, session));
+            LockUtil.doLocked(lock.writeLock(), () -> {
+                FixSession session = engine.getSession(sessionId);
+                sessions.put(sessionId, new FixSessionProxy(sessionId, session));
+            });
         }
     }
 
@@ -189,6 +211,38 @@ public class FixEngineProxy {
             this.sessionId = sessionId;
             this.session = session;
             this.session.registerListener(this);
+        }
+
+        private void logon() throws RemoteException {
+            session.logon();
+        }
+
+        private void logout() throws RemoteException {
+            session.logout();
+        }
+
+        private void reset() throws RemoteException {
+            session.reset();
+        }
+
+        private int getIncomingMsgSeqNum() throws RemoteException {
+            return session.getIncomingMsgSeqNum();
+        }
+
+        private void setIncomingMsgSeqNum(int msgSeqNum) throws RemoteException {
+            session.setIncomingMsgSeqNum(msgSeqNum);
+        }
+
+        private int getOutgoingMsgSeqNum() throws RemoteException {
+            return session.getOutgoingMsgSeqNum();
+        }
+
+        private void setOutgoingMsgSeqNum(int msgSeqNum) throws RemoteException {
+            session.setOutgoingMsgSeqNum(msgSeqNum);
+        }
+
+        private boolean send(FixMessage message) throws RemoteException {
+            return session.send(message);
         }
 
         private void destroy() throws RemoteException {

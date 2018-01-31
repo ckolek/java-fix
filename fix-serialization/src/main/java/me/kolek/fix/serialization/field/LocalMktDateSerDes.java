@@ -1,5 +1,7 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 import java.time.LocalDate;
 
 /**
@@ -7,6 +9,6 @@ import java.time.LocalDate;
  */
 public class LocalMktDateSerDes extends DateTimeSerDes<LocalDate> {
     public LocalMktDateSerDes(String... formats) {
-        super(LocalDate.class, LocalDate::from, formats);
+        super(FieldType.LOCALMKTDATE, LocalDate.class, LocalDate::from, formats);
     }
 }

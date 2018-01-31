@@ -16,6 +16,8 @@ public interface FixSession extends Remote {
 
     void logout() throws RemoteException;
 
+    boolean isLoggedOn() throws RemoteException;
+
     int getIncomingMsgSeqNum() throws RemoteException;
 
     void setIncomingMsgSeqNum(int msgSeqNum) throws RemoteException;

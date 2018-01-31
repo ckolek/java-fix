@@ -1,11 +1,13 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 /**
  * @author ckolek
  */
 public class CharSerDes extends FieldSerDesBase<Character> {
     public CharSerDes() {
-        super(Character.class);
+        super(FieldType.CHAR, Character.class);
     }
 
     @Override

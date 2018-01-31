@@ -1,5 +1,7 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -12,8 +14,8 @@ import java.util.Objects;
 public abstract class NumberSerDes<N extends Number> extends FieldSerDesBase<N> {
     private final ThreadLocal<NumberFormat>[] formats;
 
-    public NumberSerDes(Class<N> valueType, Double multiplier, String... formats) {
-        super(valueType);
+    public NumberSerDes(FieldType fieldType, Class<N> valueType, Double multiplier, String... formats) {
+        super(fieldType, valueType);
         this.formats = Arrays.stream(formats).filter(Objects::nonNull)
                 .map(format -> ThreadLocal.withInitial(() -> new DecimalFormat(format))).toArray(ThreadLocal[]::new);
     }

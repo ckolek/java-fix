@@ -1,5 +1,7 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 import java.time.OffsetTime;
 
 /**
@@ -7,6 +9,6 @@ import java.time.OffsetTime;
  */
 public class TzTimeOnlySerDes extends DateTimeSerDes<OffsetTime> {
     public TzTimeOnlySerDes(String... formats) {
-        super(OffsetTime.class, OffsetTime::from, formats);
+        super(FieldType.TZTIMEONLY, OffsetTime.class, OffsetTime::from, formats);
     }
 }

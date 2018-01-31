@@ -1,17 +1,19 @@
 package me.kolek.fix.engine.quickfixj;
 
-import me.kolek.fix.FixDictionary;
 import me.kolek.fix.FixMessage;
-import me.kolek.fix.constants.TagNum;
+import me.kolek.fix.constants.BeginString;
 import me.kolek.fix.engine.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quickfix.DataDictionary;
 import quickfix.Session;
 import quickfix.SessionID;
+import quickfix.field.ApplVerID;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Map;
 
 class QfjFixSession extends UnicastRemoteObject implements FixSession {
     private static final Logger logger = LoggerFactory.getLogger(QfjFixSession.class);
@@ -19,14 +21,15 @@ class QfjFixSession extends UnicastRemoteObject implements FixSession {
     private final FixSessionId sessionId;
     private final Session session;
 
-    private final FixDictionaryProvider dictionaryProvider;
+    private final Map<BeginString, DataDictionary> dictionaries;
 
     private FixSessionListener listener;
 
-    QfjFixSession(SessionID sessionId, Session session, FixDictionaryProvider dictionaryProvider) throws RemoteException {
+    QfjFixSession(SessionID sessionId, Session session, Map<BeginString, DataDictionary> dictionaries)
+            throws RemoteException {
         this.sessionId = QfjUtil.toFixSessionId(sessionId);
         this.session = session;
-        this.dictionaryProvider = dictionaryProvider;
+        this.dictionaries = dictionaries;
     }
 
     @Override
@@ -52,6 +55,11 @@ class QfjFixSession extends UnicastRemoteObject implements FixSession {
     @Override
     public void logout() throws RemoteException {
         session.logout();
+    }
+
+    @Override
+    public boolean isLoggedOn() throws RemoteException {
+        return session.isLoggedOn();
     }
 
     @Override
@@ -93,18 +101,13 @@ class QfjFixSession extends UnicastRemoteObject implements FixSession {
 
     @Override
     public boolean send(FixMessage message) throws RemoteException {
-        String beginString = message.getBeginString()
-                .orElseThrow(() -> new FixEngineException("message must have a BeginString value"));
-        String applVerId;
-        if (beginString.startsWith("FIXT")) {
-            applVerId = message.getValue(TagNum.ApplVerID).orElse(null);
-        } else {
-            applVerId = null;
+        try {
+            ApplVerID defApplVerID = session.getTargetDefaultApplicationVersionID();
+            return session.send(QfjUtil
+                    .toMessage(dictionaries, message, defApplVerID != null ? defApplVerID.getValue() : null));
+        } catch (InvalidMessageException e) {
+            throw new FixEngineException("invalid message: " + e.getMessage());
         }
-
-        FixDictionary dictionary = dictionaryProvider.getDictionary(sessionId, applVerId);
-
-        return session.send(QfjUtil.toMessage(dictionary, message));
     }
 
     void fireOnLogon() {

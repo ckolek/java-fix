@@ -1,6 +1,10 @@
 package me.kolek.fix.engine.quickfixj;
 
-import me.kolek.fix.engine.*;
+import me.kolek.fix.constants.BeginString;
+import me.kolek.fix.engine.FixEngine;
+import me.kolek.fix.engine.FixEngineCallback;
+import me.kolek.fix.engine.FixSession;
+import me.kolek.fix.engine.FixSessionId;
 import me.kolek.util.function.ThrowingFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,18 +17,16 @@ import java.util.*;
 class QfjFixEngine extends UnicastRemoteObject implements FixEngine {
     private static final Logger logger = LoggerFactory.getLogger(QfjFixEngine.class);
 
-    private final FixDictionaryProvider dictionaryProvider;
     private final FixEngineCallback callback;
     private final Initiator initiator;
     private final Acceptor acceptor;
 
     private final Map<SessionID, QfjFixSession> sessions;
 
-    QfjFixEngine(FixDictionaryProvider dictionaryProvider, FixEngineCallback callback,
+    QfjFixEngine(Map<BeginString, DataDictionary> dictionaries, FixEngineCallback callback,
             ThrowingFunction<Application, Initiator, ConfigError> initiatorConstructor,
             ThrowingFunction<Application, Acceptor, ConfigError> acceptorConstructor)
             throws ConfigError, RemoteException {
-        this.dictionaryProvider = dictionaryProvider;
         this.callback = callback;
 
         List<SessionID> sessionIds = new ArrayList<>();
@@ -39,7 +41,7 @@ class QfjFixEngine extends UnicastRemoteObject implements FixEngine {
 
         Map<SessionID, QfjFixSession> sessions = new HashMap<>();
         for (SessionID sessionID : sessionIds) {
-            QfjFixSession session = new QfjFixSession(sessionID, Session.lookupSession(sessionID), dictionaryProvider);
+            QfjFixSession session = new QfjFixSession(sessionID, Session.lookupSession(sessionID), dictionaries);
             sessions.put(sessionID, session);
         }
         this.sessions = Collections.unmodifiableMap(sessions);

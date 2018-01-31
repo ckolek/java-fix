@@ -1,5 +1,7 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 import java.time.YearMonth;
 
 /**
@@ -7,6 +9,6 @@ import java.time.YearMonth;
  */
 public class MonthYearSerDes extends DateTimeSerDes<YearMonth> {
     public MonthYearSerDes(String... formats) {
-        super(YearMonth.class, YearMonth::from, formats);
+        super(FieldType.MONTHYEAR, YearMonth.class, YearMonth::from, formats);
     }
 }

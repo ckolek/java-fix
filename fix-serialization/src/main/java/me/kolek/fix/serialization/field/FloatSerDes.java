@@ -1,5 +1,7 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -8,7 +10,11 @@ import java.text.ParseException;
  */
 public class FloatSerDes extends NumberSerDes<Double> {
     public FloatSerDes(Double multiplier, String... formats) {
-        super(Double.class, multiplier, formats);
+        this(FieldType.FLOAT, multiplier, formats);
+    }
+
+    public FloatSerDes(FieldType fieldType, Double multiplier, String... formats) {
+        super(fieldType, Double.class, multiplier, formats);
     }
 
     @Override

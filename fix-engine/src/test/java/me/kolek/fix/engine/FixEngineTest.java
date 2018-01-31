@@ -3,7 +3,6 @@ package me.kolek.fix.engine;
 import me.kolek.fix.constants.BeginString;
 import me.kolek.fix.engine.config.FixEngineConfiguration;
 import me.kolek.fix.engine.runtime.UnicastFixEngineCallback;
-import org.junit.Test;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -11,7 +10,7 @@ import java.rmi.registry.Registry;
 import java.util.concurrent.CountDownLatch;
 
 public class FixEngineTest {
-    @Test
+//    @Test
     public void testEngine() throws Exception {
         Registry registry = LocateRegistry.getRegistry();
 
@@ -20,11 +19,11 @@ public class FixEngineTest {
         CountDownLatch latch = new CountDownLatch(3);
 
         FixSessionId sell40Id = FixSessionId
-                .build(id -> id.beginString(BeginString.FIX40).senderCompId("BUY40").targetCompId("SELL40"));
+                .build(id -> id.beginString(BeginString._FIX40).senderCompId("BUY40").targetCompId("SELL40"));
         FixSessionId sell42Id = FixSessionId
-                .build(id -> id.beginString(BeginString.FIX42).senderCompId("BUY42").targetCompId("SELL42"));
+                .build(id -> id.beginString(BeginString._FIX42).senderCompId("BUY42").targetCompId("SELL42"));
         FixSessionId sell44Id = FixSessionId
-                .build(id -> id.beginString(BeginString.FIX44).senderCompId("BUY44").targetCompId("SELL44"));
+                .build(id -> id.beginString(BeginString._FIX44).senderCompId("BUY44").targetCompId("SELL44"));
 
         FixEngine engine = factory.launchEngine(FixEngineConfiguration.build(ec -> ec
                         .session(sc -> sc.initiator().sessionId(sell40Id).address("localhost", 7010)

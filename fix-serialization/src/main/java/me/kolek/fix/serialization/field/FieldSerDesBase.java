@@ -1,13 +1,22 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 /**
  * @author ckolek
  */
 public abstract class FieldSerDesBase<T> implements FieldSerDes<T> {
+    private final FieldType fieldType;
     private final Class<T> valueType;
 
-    protected FieldSerDesBase(Class<T> valueType) {
+    protected FieldSerDesBase(FieldType fieldType, Class<T> valueType) {
+        this.fieldType = fieldType;
         this.valueType = valueType;
+    }
+
+    @Override
+    public FieldType getFieldType() {
+        return fieldType;
     }
 
     @Override

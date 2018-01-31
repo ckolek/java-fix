@@ -1493,46 +1493,4 @@ public enum Field {
         return type;
     }
 
-    public enum FieldType {
-        BOOLEAN(Boolean.class),
-        DATA(byte[].class),
-        INT(Integer.class),
-        DAYOFMONTH(Integer.class),
-        LENGTH(Integer.class),
-        NUMINGROUP(Integer.class),
-        SEQNUM(Integer.class),
-        FLOAT(Double.class),
-        AMT(Double.class),
-        PRICE(Double.class),
-        PERCENTAGE(Double.class),
-        PRICEOFFSET(Double.class),
-        QTY(Double.class),
-        CHAR(Character.class),
-        STRING(String.class),
-        COUNTRY(String.class),
-        CURRENCY(String.class),
-        EXCHANGE(String.class),
-        LANGUAGE(String.class),
-        XMLDATA(String.class),
-        MULTIPLECHARVALUE(char[].class),
-        MULTIPLESTRINGVALUE(String[].class),
-        MONTHYEAR(java.time.YearMonth.class),
-        LOCALMKTDATE(java.time.LocalDate.class),
-        UTCDATEONLY(java.time.LocalDate.class),
-        TZTIMEONLY(java.time.OffsetTime.class),
-        UTCTIMEONLY(java.time.OffsetTime.class),
-        TZTIMESTAMP(java.time.OffsetDateTime.class),
-        UTCTIMESTAMP(java.time.OffsetDateTime.class),
-        DATETIME(java.time.temporal.TemporalAccessor.class);
-
-        private final Class<?> valueClass;
-
-        FieldType(Class<?> valueClass) {
-            this.valueClass = valueClass;
-        }
-
-        public Class<?> getValueClass() {
-            return valueClass;
-        }
-    }
 }

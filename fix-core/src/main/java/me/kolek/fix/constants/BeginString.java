@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -37,10 +39,24 @@ public enum BeginString {
 
     private final String value;
     private final ApplVerId applVerId;
+    private final boolean isTransport;
+    private final int major;
+    private final int minor;
+    private final int servicePack;
 
     BeginString(String value, ApplVerId applVerId) {
         this.value = value;
         this.applVerId = applVerId;
+
+        Matcher matcher = Pattern.compile("FIX(T)?\\.(\\d+)\\.(\\d+)(SP(\\d+))").matcher(value);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("value does not match accepted pattern");
+        }
+
+        this.isTransport = matcher.group(1) != null;
+        this.major = Integer.parseInt(matcher.group(2));
+        this.minor = Integer.parseInt(matcher.group(3));
+        this.servicePack = matcher.group(4) != null ? Integer.parseInt(matcher.group(5)) : -1;
     }
 
     public String value() {
@@ -49,6 +65,22 @@ public enum BeginString {
 
     public ApplVerId getApplVerId() {
         return applVerId;
+    }
+
+    public boolean isTransport() {
+        return isTransport;
+    }
+
+    public int getMajor() {
+        return major;
+    }
+
+    public int getMinor() {
+        return minor;
+    }
+
+    public int getServicePack() {
+        return servicePack;
     }
 
     private static final Map<String, BeginString> byValue = Collections.unmodifiableMap(

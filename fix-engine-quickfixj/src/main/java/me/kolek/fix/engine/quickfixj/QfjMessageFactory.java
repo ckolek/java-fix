@@ -1,21 +1,31 @@
 package me.kolek.fix.engine.quickfixj;
 
-import me.kolek.fix.engine.FixDictionaryProvider;
+import me.kolek.fix.FixDictionary;
+import me.kolek.fix.util.FixMessageParser;
 import quickfix.Group;
 import quickfix.Message;
 import quickfix.MessageFactory;
 import quickfix.QfjMessage;
+import quickfix.field.ApplVerID;
 
-public class QfjMessageFactory implements MessageFactory {
-    private final FixDictionaryProvider dictionaryProvider;
+class QfjMessageFactory implements MessageFactory {
+    private final FixDictionary dictionary;
+    private final FixMessageParser.Pool parserPool;
 
-    public QfjMessageFactory(FixDictionaryProvider dictionaryProvider) {
-        this.dictionaryProvider = dictionaryProvider;
+    QfjMessageFactory(FixDictionary dictionary) {
+        this.dictionary = dictionary;
+        this.parserPool = new FixMessageParser.Pool(dictionary);
     }
 
     @Override
     public Message create(String beginString, String msgType) {
-        return new QfjMessage(dictionaryProvider, beginString, msgType);
+        return create(beginString, null, msgType);
+    }
+
+    @Override
+    public Message create(String beginString, ApplVerID applVerID, String msgType) {
+        String applVerId = applVerID != null ? applVerID.getValue() : null;
+        return new QfjMessage(dictionary, parserPool, beginString, applVerId, msgType);
     }
 
     @Override

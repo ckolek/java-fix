@@ -1,6 +1,10 @@
 package me.kolek.fix.engine.quickfixj;
 
-import me.kolek.fix.engine.*;
+import me.kolek.fix.FixDictionary;
+import me.kolek.fix.engine.FixEngine;
+import me.kolek.fix.engine.FixEngineCallback;
+import me.kolek.fix.engine.FixEngineException;
+import me.kolek.fix.engine.FixEngineFactory;
 import me.kolek.fix.engine.config.FixEngineConfiguration;
 import me.kolek.fix.engine.config.FixSessionConfiguration;
 import me.kolek.util.tuple.Tuple;
@@ -36,7 +40,7 @@ class QfjFixEngineFactory extends UnicastRemoteObject implements FixEngineFactor
     }
 
     @Override
-    public FixEngine launchEngine(FixEngineConfiguration configuration, FixDictionaryProvider dictionaryProvider,
+    public FixEngine launchEngine(FixEngineConfiguration configuration, FixDictionary dictionary,
             FixEngineCallback callback) throws RemoteException {
         if (engine != null) {
             if (this.configuration != null && this.configuration.equals(configuration)) {
@@ -54,8 +58,8 @@ class QfjFixEngineFactory extends UnicastRemoteObject implements FixEngineFactor
             SessionSettings settings = result.first();
             MessageStoreFactory messageStoreFactory = getMessageStoreFactory(settings);
             LogFactory logFactory = getLogFactory(settings);
-            MessageFactory messageFactory = getMessageFactory(settings);
-            this.engine = new QfjFixEngine(dictionaryProvider, callback,
+            MessageFactory messageFactory = getMessageFactory(settings, dictionary);
+            this.engine = new QfjFixEngine(QfjUtil.toDataDictionaries(dictionary), callback,
                     app -> result.second() ? new SocketInitiator(app, messageStoreFactory, settings, logFactory,
                             messageFactory) : null,
                     app -> result.third() ? new SocketAcceptor(app, messageStoreFactory, settings, logFactory,
@@ -106,7 +110,11 @@ class QfjFixEngineFactory extends UnicastRemoteObject implements FixEngineFactor
         return new FileLogFactory(settings);
     }
 
-    private MessageFactory getMessageFactory(SessionSettings settings) {
-        return new DefaultMessageFactory();
+    private MessageFactory getMessageFactory(SessionSettings settings, FixDictionary dictionary) {
+        if (dictionary != null) {
+            return new QfjMessageFactory(dictionary);
+        } else {
+            return new DefaultMessageFactory();
+        }
     }
 }

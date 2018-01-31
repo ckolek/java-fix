@@ -1,5 +1,7 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 import java.util.Arrays;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Arrays;
  */
 public class MultipleStringValueSerDes extends FieldSerDesBase<String[]> {
     public MultipleStringValueSerDes() {
-        super(String[].class);
+        super(FieldType.MULTIPLESTRINGVALUE, String[].class);
     }
 
     @Override

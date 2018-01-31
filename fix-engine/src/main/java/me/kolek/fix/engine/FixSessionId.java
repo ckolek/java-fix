@@ -3,10 +3,13 @@ package me.kolek.fix.engine;
 import me.kolek.util.ObjectUtil;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class FixSessionId implements Serializable {
+public class FixSessionId implements Serializable, Comparable<FixSessionId> {
+    private static final Comparator<String> FIELD_COMPARATOR = Comparator.nullsFirst(Comparator.naturalOrder());
+
     private final String beginString;
     private final String senderCompId;
     private final String senderSubId;
@@ -55,6 +58,28 @@ public class FixSessionId implements Serializable {
     }
 
     @Override
+    public int compareTo(FixSessionId o) {
+        int comparison;
+        if ((comparison = FIELD_COMPARATOR.compare(beginString, o.beginString)) != 0) {
+            return comparison;
+        } else if ((comparison = FIELD_COMPARATOR.compare(senderCompId, o.senderCompId)) != 0) {
+            return comparison;
+        } else if ((comparison = FIELD_COMPARATOR.compare(senderSubId, o.senderSubId)) != 0) {
+            return comparison;
+        } else if ((comparison = FIELD_COMPARATOR.compare(senderLocationId, o.senderLocationId)) != 0) {
+            return comparison;
+        } else if ((comparison = FIELD_COMPARATOR.compare(targetCompId, o.targetCompId)) != 0) {
+            return comparison;
+        } else if ((comparison = FIELD_COMPARATOR.compare(targetSubId, o.targetSubId)) != 0) {
+            return comparison;
+        } else if ((comparison = FIELD_COMPARATOR.compare(targetLocationId, o.targetLocationId)) != 0) {
+            return comparison;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(beginString, senderCompId, senderSubId, senderLocationId, targetCompId, targetSubId,
                 targetLocationId);
@@ -62,9 +87,7 @@ public class FixSessionId implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return ObjectUtil.equals(this, obj, FixSessionId::getBeginString, FixSessionId::getSenderCompId,
-                FixSessionId::getSenderSubId, FixSessionId::getSenderLocationId, FixSessionId::getTargetCompId,
-                FixSessionId::getTargetSubId, FixSessionId::getTargetLocationId);
+        return ObjectUtil.equals(this, obj);
     }
 
     public static FixSessionId build(Consumer<Builder> builderConsumer) {

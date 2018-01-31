@@ -1,11 +1,13 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 /**
  * @author ckolek
  */
 public class BooleanSerDes extends FieldSerDesBase<Boolean> {
     public BooleanSerDes() {
-        super(Boolean.class);
+        super(FieldType.BOOLEAN, Boolean.class);
     }
 
     @Override

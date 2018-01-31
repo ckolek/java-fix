@@ -1,6 +1,7 @@
 package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.TagValue;
+import me.kolek.fix.constants.FieldType;
 import me.kolek.fix.serialization.field.FieldSerDes;
 import me.kolek.util.io.WriterHelper;
 
@@ -32,6 +33,10 @@ public class FieldMetadata<T> {
 
     public String getName() {
         return name;
+    }
+
+    public FieldType getType() {
+        return serDes.getFieldType();
     }
 
     public FieldSerDes<T> getSerDes() {

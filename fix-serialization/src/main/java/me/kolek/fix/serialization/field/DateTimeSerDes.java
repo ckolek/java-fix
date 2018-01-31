@@ -1,5 +1,7 @@
 package me.kolek.fix.serialization.field;
 
+import me.kolek.fix.constants.FieldType;
+
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
@@ -14,8 +16,8 @@ public class DateTimeSerDes<T extends TemporalAccessor> extends FieldSerDesBase<
     private final TemporalQuery<T> query;
     private final DateTimeFormatter[] formats;
 
-    public DateTimeSerDes(Class<T> valueType, TemporalQuery<T> query, String... formats) {
-        super(valueType);
+    public DateTimeSerDes(FieldType fieldType, Class<T> valueType, TemporalQuery<T> query, String... formats) {
+        super(fieldType, valueType);
         this.query = query;
         this.formats = Arrays.stream(formats).filter(Objects::nonNull).map(DateTimeFormatter::ofPattern)
                 .toArray(DateTimeFormatter[]::new);

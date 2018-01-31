@@ -23,6 +23,7 @@ import java.util.*;
 public abstract class StructureMetadata<S extends MetadataStructure<?>> {
     private final long id;
     private final String name;
+    private final List<StructureMember> members;
     private final Map<String, ComponentMember> componentsByName;
     private final TIntObjectMap<ComponentMember> componentsByContainedTagNum;
     private final Map<String, GroupMember> groupsByName;
@@ -34,6 +35,7 @@ public abstract class StructureMetadata<S extends MetadataStructure<?>> {
     public StructureMetadata(long id, String name, List<StructureMember> members) {
         this.id = id;
         this.name = name;
+        this.members = Collections.unmodifiableList(members);
 
         Map<String, ComponentMember> componentsByName = new HashMap<>();
         TIntObjectMap<ComponentMember> componentsByContainedTagNum = new TIntObjectHashMap<>();
@@ -80,6 +82,10 @@ public abstract class StructureMetadata<S extends MetadataStructure<?>> {
 
     public String getName() {
         return name;
+    }
+
+    public List<StructureMember> getMembers() {
+        return members;
     }
 
     public boolean hasComponentMember(String name) {
