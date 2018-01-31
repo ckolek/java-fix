@@ -23,22 +23,22 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Section_cs_t">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="SectionID" type="{}SectionID_t"/>
- *         &lt;element name="Name" type="{}Name_t"/>
- *         &lt;element name="DisplayOrder" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="Volume" type="{}Volume_t"/>
- *         &lt;element name="NotReqXML" type="{}BOOL_t"/>
- *         &lt;element name="FIXMLFileName" type="{}Name_t" minOccurs="0"/>
- *         &lt;element name="Description" type="{}Description_t" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="Section_cs_t"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="SectionID" type="{}SectionID_t"/&gt;
+ *         &lt;element name="Name" type="{}Name_t"/&gt;
+ *         &lt;element name="DisplayOrder" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="Volume" type="{}Volume_t"/&gt;
+ *         &lt;element name="NotReqXML" type="{}BOOL_t"/&gt;
+ *         &lt;element name="FIXMLFileName" type="{}Name_t" minOccurs="0"/&gt;
+ *         &lt;element name="Description" type="{}Description_t" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

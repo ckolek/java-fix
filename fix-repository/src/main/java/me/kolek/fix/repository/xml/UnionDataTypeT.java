@@ -19,15 +19,15 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="UnionDataType_t">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="Qty"/>
- *     &lt;enumeration value="Reserved100Plus"/>
- *     &lt;enumeration value="Reserved1000Plus"/>
- *     &lt;enumeration value="Reserved4000Plus"/>
- *     &lt;enumeration value="Tenor"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
+ * &lt;simpleType name="UnionDataType_t"&gt;
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
+ *     &lt;enumeration value="Qty"/&gt;
+ *     &lt;enumeration value="Reserved100Plus"/&gt;
+ *     &lt;enumeration value="Reserved1000Plus"/&gt;
+ *     &lt;enumeration value="Reserved4000Plus"/&gt;
+ *     &lt;enumeration value="Tenor"/&gt;
+ *   &lt;/restriction&gt;
+ * &lt;/simpleType&gt;
  * </pre>
  * 
  */

@@ -24,22 +24,22 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="MsgContent_cs_t">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="ComponentID" type="{}MsgOrCompID_t"/>
- *         &lt;element name="TagText" type="{}TagText_t"/>
- *         &lt;element name="Indent" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger"/>
- *         &lt;element name="Position" type="{http://www.w3.org/2001/XMLSchema}decimal"/>
- *         &lt;element name="Reqd" type="{}BOOL_t"/>
- *         &lt;element name="Inlined" type="{}BOOL_t" minOccurs="0"/>
- *         &lt;element name="Description" type="{}Description_t" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="MsgContent_cs_t"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="ComponentID" type="{}MsgOrCompID_t"/&gt;
+ *         &lt;element name="TagText" type="{}TagText_t"/&gt;
+ *         &lt;element name="Indent" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger"/&gt;
+ *         &lt;element name="Position" type="{http://www.w3.org/2001/XMLSchema}decimal"/&gt;
+ *         &lt;element name="Reqd" type="{}BOOL_t"/&gt;
+ *         &lt;element name="Inlined" type="{}BOOL_t" minOccurs="0"/&gt;
+ *         &lt;element name="Description" type="{}Description_t" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

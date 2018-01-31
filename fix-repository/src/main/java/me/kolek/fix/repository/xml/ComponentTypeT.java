@@ -19,18 +19,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="ComponentType_t">
- *   &lt;restriction base="{}Name_t">
- *     &lt;enumeration value="BlockRepeating"/>
- *     &lt;enumeration value="ImplicitBlockRepeating"/>
- *     &lt;enumeration value="Block"/>
- *     &lt;enumeration value="ImplicitBlock"/>
- *     &lt;enumeration value="XMLDataBlock"/>
- *     &lt;enumeration value="OptimisedBlockRepeating"/>
- *     &lt;enumeration value="OptimisedImplicitBlockRepeating"/>
- *     &lt;enumeration value="Message"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
+ * &lt;simpleType name="ComponentType_t"&gt;
+ *   &lt;restriction base="{}Name_t"&gt;
+ *     &lt;enumeration value="BlockRepeating"/&gt;
+ *     &lt;enumeration value="ImplicitBlockRepeating"/&gt;
+ *     &lt;enumeration value="Block"/&gt;
+ *     &lt;enumeration value="ImplicitBlock"/&gt;
+ *     &lt;enumeration value="XMLDataBlock"/&gt;
+ *     &lt;enumeration value="OptimisedBlockRepeating"/&gt;
+ *     &lt;enumeration value="OptimisedImplicitBlockRepeating"/&gt;
+ *     &lt;enumeration value="Message"/&gt;
+ *   &lt;/restriction&gt;
+ * &lt;/simpleType&gt;
  * </pre>
  * 
  */

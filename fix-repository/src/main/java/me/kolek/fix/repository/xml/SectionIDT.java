@@ -19,16 +19,16 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="SectionID_t">
- *   &lt;restriction base="{}Name_t">
- *     &lt;enumeration value="Session"/>
- *     &lt;enumeration value="PreTrade"/>
- *     &lt;enumeration value="Trade"/>
- *     &lt;enumeration value="PostTrade"/>
- *     &lt;enumeration value="Infrastructure"/>
- *     &lt;enumeration value="Other"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
+ * &lt;simpleType name="SectionID_t"&gt;
+ *   &lt;restriction base="{}Name_t"&gt;
+ *     &lt;enumeration value="Session"/&gt;
+ *     &lt;enumeration value="PreTrade"/&gt;
+ *     &lt;enumeration value="Trade"/&gt;
+ *     &lt;enumeration value="PostTrade"/&gt;
+ *     &lt;enumeration value="Infrastructure"/&gt;
+ *     &lt;enumeration value="Other"/&gt;
+ *   &lt;/restriction&gt;
+ * &lt;/simpleType&gt;
  * </pre>
  * 
  */

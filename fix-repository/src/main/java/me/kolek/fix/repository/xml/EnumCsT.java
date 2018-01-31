@@ -23,22 +23,22 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Enum_cs_t">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Tag" type="{}Tag_t"/>
- *         &lt;element name="Value" type="{}Enumeration_t"/>
- *         &lt;element name="SymbolicName" type="{}SymbolicName_t" minOccurs="0"/>
- *         &lt;element name="Group" type="{}Group_t" minOccurs="0"/>
- *         &lt;element name="Sort" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="Description" type="{}Description_t" minOccurs="0"/>
- *         &lt;element name="Elaboration" type="{}Elaboration_t" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="Enum_cs_t"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="Tag" type="{}Tag_t"/&gt;
+ *         &lt;element name="Value" type="{}Enumeration_t"/&gt;
+ *         &lt;element name="SymbolicName" type="{}SymbolicName_t" minOccurs="0"/&gt;
+ *         &lt;element name="Group" type="{}Group_t" minOccurs="0"/&gt;
+ *         &lt;element name="Sort" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="Description" type="{}Description_t" minOccurs="0"/&gt;
+ *         &lt;element name="Elaboration" type="{}Elaboration_t" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

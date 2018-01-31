@@ -19,15 +19,15 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="VolumeName_t">
- *   &lt;restriction base="{}Name_t">
- *     &lt;enumeration value="Volume1"/>
- *     &lt;enumeration value="Volume2"/>
- *     &lt;enumeration value="Volume3"/>
- *     &lt;enumeration value="Volume4"/>
- *     &lt;enumeration value="Volume5"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
+ * &lt;simpleType name="VolumeName_t"&gt;
+ *   &lt;restriction base="{}Name_t"&gt;
+ *     &lt;enumeration value="Volume1"/&gt;
+ *     &lt;enumeration value="Volume2"/&gt;
+ *     &lt;enumeration value="Volume3"/&gt;
+ *     &lt;enumeration value="Volume4"/&gt;
+ *     &lt;enumeration value="Volume5"/&gt;
+ *   &lt;/restriction&gt;
+ * &lt;/simpleType&gt;
  * </pre>
  * 
  */

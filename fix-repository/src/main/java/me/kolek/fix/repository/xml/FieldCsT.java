@@ -18,31 +18,31 @@ import java.math.BigInteger;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Field_cs_t">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Tag" type="{}Tag_t"/>
- *         &lt;element name="Name" type="{}SymbolicName_t"/>
- *         &lt;element name="Type" type="{}Datatype_t"/>
- *         &lt;element name="AssociatedDataTag" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="AbbrName" type="{}SymbolicName_t" minOccurs="0"/>
- *         &lt;element name="BaseCategory" type="{}CategoryID_t" minOccurs="0"/>
- *         &lt;element name="BaseCategoryAbbrName" type="{}Name_t" minOccurs="0"/>
- *         &lt;element name="NotReqXML" type="{}BOOL_t"/>
- *         &lt;element name="EnumDatatype" type="{}Tag_t" minOccurs="0"/>
- *         &lt;element name="UnionDataType" type="{}UnionDataType_t" minOccurs="0"/>
- *         &lt;element name="Description" type="{}Description_t"/>
- *         &lt;element name="Elaboration" type="{}Elaboration_t" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/>
- *       &lt;attribute name="replaced" type="{}Version_t" />
- *       &lt;attribute name="replacedEP" type="{}EP_t" />
- *       &lt;attribute name="replacedByField" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="notUsed" type="{}BOOL_t" />
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="Field_cs_t"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="Tag" type="{}Tag_t"/&gt;
+ *         &lt;element name="Name" type="{}SymbolicName_t"/&gt;
+ *         &lt;element name="Type" type="{}Datatype_t"/&gt;
+ *         &lt;element name="AssociatedDataTag" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="AbbrName" type="{}SymbolicName_t" minOccurs="0"/&gt;
+ *         &lt;element name="BaseCategory" type="{}CategoryID_t" minOccurs="0"/&gt;
+ *         &lt;element name="BaseCategoryAbbrName" type="{}Name_t" minOccurs="0"/&gt;
+ *         &lt;element name="NotReqXML" type="{}BOOL_t"/&gt;
+ *         &lt;element name="EnumDatatype" type="{}Tag_t" minOccurs="0"/&gt;
+ *         &lt;element name="UnionDataType" type="{}UnionDataType_t" minOccurs="0"/&gt;
+ *         &lt;element name="Description" type="{}Description_t"/&gt;
+ *         &lt;element name="Elaboration" type="{}Elaboration_t" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/&gt;
+ *       &lt;attribute name="replaced" type="{}Version_t" /&gt;
+ *       &lt;attribute name="replacedEP" type="{}EP_t" /&gt;
+ *       &lt;attribute name="replacedByField" type="{http://www.w3.org/2001/XMLSchema}int" /&gt;
+ *       &lt;attribute name="notUsed" type="{}BOOL_t" /&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

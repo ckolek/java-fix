@@ -18,24 +18,24 @@ import java.math.BigInteger;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Message_cs_t">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="ComponentID" type="{}MsgID_t"/>
- *         &lt;element name="MsgType" type="{}MsgType_t"/>
- *         &lt;element name="Name" type="{}Name_t"/>
- *         &lt;element name="CategoryID" type="{}CategoryID_t"/>
- *         &lt;element name="SectionID" type="{}SectionID_t"/>
- *         &lt;element name="AbbrName" type="{}Name_t" minOccurs="0"/>
- *         &lt;element name="NotReqXML" type="{}BOOL_t"/>
- *         &lt;element name="Description" type="{}Description_t"/>
- *         &lt;element name="Elaboration" type="{}Elaboration_t" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="Message_cs_t"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="ComponentID" type="{}MsgID_t"/&gt;
+ *         &lt;element name="MsgType" type="{}MsgType_t"/&gt;
+ *         &lt;element name="Name" type="{}Name_t"/&gt;
+ *         &lt;element name="CategoryID" type="{}CategoryID_t"/&gt;
+ *         &lt;element name="SectionID" type="{}SectionID_t"/&gt;
+ *         &lt;element name="AbbrName" type="{}Name_t" minOccurs="0"/&gt;
+ *         &lt;element name="NotReqXML" type="{}BOOL_t"/&gt;
+ *         &lt;element name="Description" type="{}Description_t"/&gt;
+ *         &lt;element name="Elaboration" type="{}Elaboration_t" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attGroup ref="{}EntityLevelRevisionAttribGrp"/&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
