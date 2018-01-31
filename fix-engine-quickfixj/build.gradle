@@ -1,5 +1,5 @@
 dependencies {
     compile project(':fix-engine')
-    compile group: 'org.quickfixj', name: 'quickfixj-core', version: '1.6.3'
+    compile group: 'org.quickfixj', name: 'quickfixj-core', version: '2.1.0-SNAPSHOT'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
 }

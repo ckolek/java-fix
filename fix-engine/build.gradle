@@ -1,4 +1,4 @@
 dependencies {
     compile project(':fix-core')
-    compile group: 'me.kolek', name: 'util', version: '1.0-SNAPSHOT'
+    compile group: 'me.kolek', name: 'util', version: '1.0.0-SNAPSHOT'
 }
