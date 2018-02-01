@@ -21,9 +21,15 @@ allprojects {
         repositories {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-                repository(url: version.endsWith("-SNAPSHOT") ? mavenRepoSnapshot : mavenRepoStaging) {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
+
+                repository(url: mavenRepoStaging) {
+                    authentication(userName: "$System.env.OSSRH_JIRA_USERNAME", password: "$System.env.OSSRH_JIRA_PASSWORD")
                 }
+
+                snapshotRepository(url: mavenRepoSnapshot) {
+                    authentication(userName: "$System.env.OSSRH_JIRA_USERNAME", password: "$System.env.OSSRH_JIRA_PASSWORD")
+                }
+
                 pom.project {
                     name name
                     description description
