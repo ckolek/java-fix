@@ -13,6 +13,10 @@ allprojects {
         }
     }
 
+    ext."signing.keyId" = System.env.GPG_KEY_ID
+    ext."signing.password" = System.env.GPG_PASSPHRASE
+    ext."signing.secretKeyRingFile" = "$rootProject.projectDir/cd/codesigning.gpg"
+
     signing {
         sign configurations.archives
     }
