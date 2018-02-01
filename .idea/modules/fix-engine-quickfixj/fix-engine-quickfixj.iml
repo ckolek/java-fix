@@ -18,7 +18,7 @@
     <orderEntry type="module" module-name="fix-engine" scope="PROVIDED" />
     <orderEntry type="module" module-name="fix-core" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:19.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.quickfixj:quickfixj-core:2.1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.quickfixj:quickfixj-core:2.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: me.kolek:util:1.0.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.mina:mina-core:2.0.16" level="project" />
@@ -27,7 +27,7 @@
     <orderEntry type="module" module-name="fix-engine" scope="RUNTIME" />
     <orderEntry type="module" module-name="fix-core" scope="RUNTIME" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:guava:19.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.quickfixj:quickfixj-core:2.1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.quickfixj:quickfixj-core:2.0.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: me.kolek:util:1.0.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.mina:mina-core:2.0.16" level="project" />
@@ -36,7 +36,7 @@
     <orderEntry type="module" module-name="fix-engine" scope="TEST" />
     <orderEntry type="module" module-name="fix-core" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.guava:guava:19.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.quickfixj:quickfixj-core:2.1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.quickfixj:quickfixj-core:2.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: me.kolek:util:1.0.0-SNAPSHOT" level="project" />

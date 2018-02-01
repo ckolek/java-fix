@@ -1,12 +1,10 @@
 package me.kolek.fix.engine.quickfixj;
 
 import me.kolek.fix.FixDictionary;
+import me.kolek.fix.constants.ApplVerId;
+import me.kolek.fix.constants.BeginString;
 import me.kolek.fix.util.FixMessageParser;
-import quickfix.Group;
-import quickfix.Message;
-import quickfix.MessageFactory;
-import quickfix.QfjMessage;
-import quickfix.field.ApplVerID;
+import quickfix.*;
 
 class QfjMessageFactory implements MessageFactory {
     private final FixDictionary dictionary;
@@ -19,12 +17,8 @@ class QfjMessageFactory implements MessageFactory {
 
     @Override
     public Message create(String beginString, String msgType) {
-        return create(beginString, null, msgType);
-    }
-
-    @Override
-    public Message create(String beginString, ApplVerID applVerID, String msgType) {
-        String applVerId = applVerID != null ? applVerID.getValue() : null;
+        String applVerId = BeginString.fromValue(beginString).map(bs -> bs.isTransport() ? ApplVerId.FIX50 : null)
+                .map(ApplVerId::value).orElse(null);
         return new QfjMessage(dictionary, parserPool, beginString, applVerId, msgType);
     }
 
