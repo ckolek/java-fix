@@ -1,6 +1,7 @@
 package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.TagValue;
+import me.kolek.fix.serialization.Field;
 import me.kolek.util.io.WriterHelper;
 
 import java.io.IOException;
@@ -23,23 +24,23 @@ public class FieldMember<T> extends StructureMember {
 
     @Override
     void serialize(AbstractStructure<?> structure, List<TagValue> tagValues) {
-        FieldValue value = structure.get(metadata.getTagNum());
+        Field value = structure.get(metadata.getTagNum());
         if (value != null) {
             tagValues.add(value.toTagValue());
         }
     }
 
     @Override
-    void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues) {
-        FieldValue value = structure.get(metadata.getTagNum());
+    void getAllFieldValues(AbstractStructure<?> structure, List<Field<?>> fields) {
+        Field value = structure.get(metadata.getTagNum());
         if (value != null) {
-            fieldValues.add(value);
+            fields.add(value);
         }
     }
 
     @Override
     WriterHelper toString(AbstractStructure<?> structure, WriterHelper writer) throws IOException {
-        FieldValue<T> value = (FieldValue<T>) structure.get(metadata.getTagNum());
+        Field<T> value = (Field<T>) structure.get(metadata.getTagNum());
         if (value != null) {
             return metadata.toString(value, writer).newLine();
         }

@@ -7,8 +7,8 @@ import java.time.LocalDate;
 /**
  * @author ckolek
  */
-public class UtcDateOnly extends DateTimeSerDes<LocalDate> {
-    public UtcDateOnly(String... formats) {
+public class UtcDateOnlySerDes extends DateTimeSerDes<LocalDate> {
+    public UtcDateOnlySerDes(String... formats) {
         super(FieldType.UTCDATEONLY, LocalDate.class, LocalDate::from, formats);
     }
 }

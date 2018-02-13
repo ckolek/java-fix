@@ -15,8 +15,8 @@ public abstract class Structure<MD extends StructureMetadata> extends
 
     private final Map<String, Component> components;
     private final TIntObjectMap<Group> groups;
-    private final TIntObjectMap<FieldValue<?>> fieldValues;
-    private final List<FieldValue<?>> udfs;
+    private final TIntObjectMap<Field<?>> fields;
+    private final List<Field<?>> udfs;
 
     protected Structure(MD metadata, Structure<?> parent) {
         super(metadata);
@@ -24,7 +24,7 @@ public abstract class Structure<MD extends StructureMetadata> extends
 
         this.components = new HashMap<>();
         this.groups = new TIntObjectHashMap<>();
-        this.fieldValues = new TIntObjectHashMap<>();
+        this.fields = new TIntObjectHashMap<>();
         this.udfs = new ArrayList<>();
     }
 
@@ -112,10 +112,10 @@ public abstract class Structure<MD extends StructureMetadata> extends
     }
 
     @Override
-    public FieldValue<?> get(int tagNum) {
-        FieldValue<?> fieldValue = fieldValues.get(tagNum);
-        if (fieldValue != null) {
-            return fieldValue;
+    public Field<?> get(int tagNum) {
+        Field<?> field = fields.get(tagNum);
+        if (field != null) {
+            return field;
         }
         Group group = groups.get(tagNum);
         if (group != null) {
@@ -130,27 +130,27 @@ public abstract class Structure<MD extends StructureMetadata> extends
     }
 
     @Override
-    public Collection<FieldValue<?>> getFieldValues() {
-        return fieldValues.valueCollection();
+    public Collection<Field<?>> getFields() {
+        return fields.valueCollection();
     }
 
     @Override
-    public void set(FieldValue<?> fieldValue) {
-        fieldValues.put(fieldValue.getTagNum(), fieldValue);
+    public void set(Field<?> field) {
+        fields.put(field.getMetadata().getTagNum(), field);
     }
 
     @Override
-    public void addUdf(FieldValue<?> tagValue) {
+    public void addUdf(Field<?> tagValue) {
         udfs.add(tagValue);
     }
 
     @Override
-    public List<FieldValue<?>> getUdfs() {
+    public List<Field<?>> getUdfs() {
         return udfs;
     }
 
     @Override
     public boolean isEmpty() {
-        return components.isEmpty() && groups.isEmpty() && fieldValues.isEmpty() && udfs.isEmpty();
+        return components.isEmpty() && groups.isEmpty() && fields.isEmpty() && udfs.isEmpty();
     }
 }

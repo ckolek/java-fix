@@ -2,6 +2,7 @@ package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.TagValue;
 import me.kolek.fix.serialization.Component;
+import me.kolek.fix.serialization.Field;
 import me.kolek.util.io.WriterHelper;
 
 import java.io.IOException;
@@ -31,10 +32,10 @@ public class ComponentMember extends StructureMember {
     }
 
     @Override
-    void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues) {
+    void getAllFieldValues(AbstractStructure<?> structure, List<Field<?>> fields) {
         Component component = structure.getComponent(metadata.getName());
         if (component != null) {
-            metadata.getAllFieldValues(component, fieldValues);
+            metadata.getAllFieldValues(component, fields);
         }
     }
 

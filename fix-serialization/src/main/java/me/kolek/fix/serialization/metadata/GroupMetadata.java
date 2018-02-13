@@ -3,6 +3,7 @@ package me.kolek.fix.serialization.metadata;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import me.kolek.fix.TagValue;
+import me.kolek.fix.serialization.Field;
 import me.kolek.fix.serialization.Group;
 import me.kolek.util.io.WriterHelper;
 
@@ -78,15 +79,15 @@ public class GroupMetadata extends StructureMetadata<Group.Element> {
         }
     }
 
-    void getAllFieldValues(Group group, List<FieldValue<?>> fieldValues) {
+    void getAllFieldValues(Group group, List<Field<?>> fields) {
         if (group.isEmpty()) {
             return;
         }
 
-        fieldValues.add(group.getNumInGroup());
+        fields.add(group.getNumInGroup());
 
         for (Group.Element element : group) {
-            getAllFieldValues(element, fieldValues);
+            getAllFieldValues(element, fields);
         }
     }
 

@@ -2,6 +2,7 @@ package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.TagValue;
 import me.kolek.fix.serialization.Component;
+import me.kolek.fix.serialization.Field;
 import me.kolek.fix.serialization.Group;
 
 import java.util.Collection;
@@ -38,15 +39,15 @@ public abstract class AbstractStructure<MD extends StructureMetadata> {
 
     public abstract void set(Group group);
 
-    public abstract FieldValue<?> get(int tagNum);
+    public abstract Field<?> get(int tagNum);
 
-    public abstract Collection<FieldValue<?>> getFieldValues();
+    public abstract Collection<Field<?>> getFields();
 
-    public abstract void set(FieldValue<?> fieldValue);
+    public abstract void set(Field<?> field);
 
-    public abstract Collection<FieldValue<?>> getUdfs();
+    public abstract Collection<Field<?>> getUdfs();
 
-    public abstract void addUdf(FieldValue<?> udf);
+    public abstract void addUdf(Field<?> udf);
 
     public abstract boolean isEmpty();
 

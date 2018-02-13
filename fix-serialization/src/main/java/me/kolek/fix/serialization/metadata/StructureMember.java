@@ -1,6 +1,7 @@
 package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.TagValue;
+import me.kolek.fix.serialization.Field;
 import me.kolek.util.io.WriterHelper;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ public abstract class StructureMember {
 
     abstract void serialize(AbstractStructure<?> structure, List<TagValue> tagValues);
 
-    abstract void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues);
+    abstract void getAllFieldValues(AbstractStructure<?> structure, List<Field<?>> fields);
 
     abstract WriterHelper toString(AbstractStructure<?> structure, WriterHelper writer) throws IOException;
 }

@@ -1,6 +1,5 @@
 package me.kolek.fix.serialization;
 
-import me.kolek.fix.serialization.metadata.FieldValue;
 import me.kolek.fix.serialization.metadata.GroupMetadata;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class Group implements Iterable<Group.Element> {
 
     private final List<Element> elements;
 
-    private FieldValue<Integer> numInGroup;
+    private Field<Integer> numInGroup;
 
     public Group(GroupMetadata metadata, Structure<?> parent) {
         this.metadata = metadata;
@@ -56,7 +55,7 @@ public class Group implements Iterable<Group.Element> {
         return element;
     }
 
-    public FieldValue<Integer> getNumInGroup() {
+    public Field<Integer> getNumInGroup() {
         return numInGroup;
     }
 

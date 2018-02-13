@@ -73,9 +73,9 @@ public interface FieldSerDes<T> {
             case TZTIMESTAMP:
                 return new TzTimestampSerDes(formats);
             case UTCDATEONLY:
-                return new UtcDateOnly(formats);
+                return new UtcDateOnlySerDes(formats);
             case UTCTIMEONLY:
-                return new UtcTimeOnly(formats);
+                return new UtcTimeOnlySerDes(formats);
             case UTCTIMESTAMP:
                 return new UtcTimestampSerDes(formats);
             case XID:

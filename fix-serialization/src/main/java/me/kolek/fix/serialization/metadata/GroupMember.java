@@ -1,6 +1,7 @@
 package me.kolek.fix.serialization.metadata;
 
 import me.kolek.fix.TagValue;
+import me.kolek.fix.serialization.Field;
 import me.kolek.fix.serialization.Group;
 import me.kolek.util.io.WriterHelper;
 
@@ -31,10 +32,10 @@ public class GroupMember extends StructureMember {
     }
 
     @Override
-    void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues) {
+    void getAllFieldValues(AbstractStructure<?> structure, List<Field<?>> fields) {
         Group group = structure.getGroup(metadata.getNumInGroupField().getTagNum());
         if (group != null) {
-            metadata.getAllFieldValues(group, fieldValues);
+            metadata.getAllFieldValues(group, fields);
         }
     }
 

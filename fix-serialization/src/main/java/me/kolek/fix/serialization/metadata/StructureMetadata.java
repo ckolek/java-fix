@@ -8,8 +8,8 @@ import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import me.kolek.fix.TagValue;
 import me.kolek.fix.serialization.Component;
+import me.kolek.fix.serialization.Field;
 import me.kolek.fix.serialization.Group;
-import me.kolek.fix.serialization.field.StringSerDes;
 import me.kolek.util.exception.CannotHappenException;
 import me.kolek.util.io.WriterHelper;
 
@@ -158,7 +158,7 @@ public abstract class StructureMetadata<S extends AbstractStructure<?>> {
         while (tagValues.hasNext()) {
             TagValue tagValue = tagValues.next();
             if (!deserialize(structure, tagValue, tagValues)) {
-                structure.addUdf(FieldValue.raw(tagValue.getTagNum(), new StringSerDes(), tagValue.getValue()));
+                structure.addUdf(Field.udf(tagValue.getTagNum(), tagValue.getValue()));
             }
         }
     }
@@ -167,7 +167,7 @@ public abstract class StructureMetadata<S extends AbstractStructure<?>> {
         FieldMember fieldMember = fieldsByTagNum.get(tagValue.getTagNum());
         if (fieldMember != null) {
             FieldMetadata fieldMetadata = fieldMember.getMetadata();
-            FieldValue<?> value = fieldMetadata.deserialize(tagValue);
+            Field<?> value = fieldMetadata.deserialize(tagValue);
             structure.set(value);
             return true;
         }
@@ -213,13 +213,13 @@ public abstract class StructureMetadata<S extends AbstractStructure<?>> {
         trailingMembers.forEach(member -> member.serialize(structure, tagValues));
     }
 
-    List<FieldValue<?>> getAllFieldValues(S structure) {
-        List<FieldValue<?>> fieldValues = new ArrayList<>();
-        getAllFieldValues(structure, fieldValues);
-        return fieldValues;
+    List<Field<?>> getAllFieldValues(S structure) {
+        List<Field<?>> fields = new ArrayList<>();
+        getAllFieldValues(structure, fields);
+        return fields;
     }
 
-    void getAllFieldValues(S structure, List<FieldValue<?>> fieldValues) {
+    void getAllFieldValues(S structure, List<Field<?>> fields) {
 
     }
 
@@ -244,8 +244,9 @@ public abstract class StructureMetadata<S extends AbstractStructure<?>> {
             }
         }
 
-        for (FieldValue<?> udf : structure.getUdfs()) {
-            writer.write("UDF(").write(udf.getTagNum()).write(") = ").write(udf.getStringValue()).newLine();
+        for (Field<?> udf : structure.getUdfs()) {
+            writer.write("UDF(").write(udf.getMetadata().getTagNum()).write(") = ").write(udf.getStringValue())
+                    .newLine();
         }
 
         for (StructureMember member : trailingMembers) {
@@ -262,12 +263,12 @@ public abstract class StructureMetadata<S extends AbstractStructure<?>> {
     private List<StructureMember> getPresentMembers(S structure) {
         Collection<Component> components = structure.getComponents();
         Collection<Group> groups = structure.getGroups();
-        Collection<FieldValue<?>> fieldValues = structure.getFieldValues();
+        Collection<Field<?>> fields = structure.getFields();
 
-        List<StructureMember> members = new ArrayList<>(components.size() + groups.size() + fieldValues.size());
+        List<StructureMember> members = new ArrayList<>(components.size() + groups.size() + fields.size());
         components.forEach(component -> members.add(getComponentMember(component.getMetadata().getName())));
         groups.forEach(group -> members.add(getGroupMember(group.getMetadata().getNumInGroupField().getTagNum())));
-        fieldValues.forEach(fieldValue -> members.add(getFieldMember(fieldValue.getTagNum())));
+        fields.forEach(field -> members.add(getFieldMember(field.getMetadata().getTagNum())));
         members.sort(Comparator.comparingInt(StructureMember::getOrderNumber));
 
         return members;
