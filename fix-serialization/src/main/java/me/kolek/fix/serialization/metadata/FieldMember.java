@@ -22,7 +22,7 @@ public class FieldMember<T> extends StructureMember {
     }
 
     @Override
-    void serialize(MetadataStructure<?> structure, List<TagValue> tagValues) {
+    void serialize(AbstractStructure<?> structure, List<TagValue> tagValues) {
         FieldValue value = structure.get(metadata.getTagNum());
         if (value != null) {
             tagValues.add(value.toTagValue());
@@ -30,7 +30,7 @@ public class FieldMember<T> extends StructureMember {
     }
 
     @Override
-    void getAllFieldValues(MetadataStructure<?> structure, List<FieldValue<?>> fieldValues) {
+    void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues) {
         FieldValue value = structure.get(metadata.getTagNum());
         if (value != null) {
             fieldValues.add(value);
@@ -38,7 +38,7 @@ public class FieldMember<T> extends StructureMember {
     }
 
     @Override
-    WriterHelper toString(MetadataStructure<?> structure, WriterHelper writer) throws IOException {
+    WriterHelper toString(AbstractStructure<?> structure, WriterHelper writer) throws IOException {
         FieldValue<T> value = (FieldValue<T>) structure.get(metadata.getTagNum());
         if (value != null) {
             return metadata.toString(value, writer).newLine();

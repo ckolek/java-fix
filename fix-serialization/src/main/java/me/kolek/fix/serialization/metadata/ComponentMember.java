@@ -23,7 +23,7 @@ public class ComponentMember extends StructureMember {
     }
 
     @Override
-    void serialize(MetadataStructure<?> structure, List<TagValue> tagValues) {
+    void serialize(AbstractStructure<?> structure, List<TagValue> tagValues) {
         Component component = structure.getComponent(metadata.getName());
         if (component != null) {
             metadata.serialize(component, tagValues);
@@ -31,7 +31,7 @@ public class ComponentMember extends StructureMember {
     }
 
     @Override
-    void getAllFieldValues(MetadataStructure<?> structure, List<FieldValue<?>> fieldValues) {
+    void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues) {
         Component component = structure.getComponent(metadata.getName());
         if (component != null) {
             metadata.getAllFieldValues(component, fieldValues);
@@ -39,7 +39,7 @@ public class ComponentMember extends StructureMember {
     }
 
     @Override
-    WriterHelper toString(MetadataStructure<?> structure, WriterHelper writer) throws IOException {
+    WriterHelper toString(AbstractStructure<?> structure, WriterHelper writer) throws IOException {
         if (!structure.isEmpty()) {
             Component component = structure.getComponent(metadata.getName());
             if (component != null) {

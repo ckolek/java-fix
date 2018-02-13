@@ -7,10 +7,10 @@ import me.kolek.fix.serialization.Group;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class MetadataStructure<MD extends StructureMetadata> {
+public abstract class AbstractStructure<MD extends StructureMetadata> {
     protected final MD metadata;
 
-    public MetadataStructure(MD metadata) {
+    public AbstractStructure(MD metadata) {
         this.metadata = metadata;
     }
 

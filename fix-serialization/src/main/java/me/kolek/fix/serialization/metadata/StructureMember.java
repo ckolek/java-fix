@@ -32,9 +32,9 @@ public abstract class StructureMember {
         return required;
     }
 
-    abstract void serialize(MetadataStructure<?> structure, List<TagValue> tagValues);
+    abstract void serialize(AbstractStructure<?> structure, List<TagValue> tagValues);
 
-    abstract void getAllFieldValues(MetadataStructure<?> structure, List<FieldValue<?>> fieldValues);
+    abstract void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues);
 
-    abstract WriterHelper toString(MetadataStructure<?> structure, WriterHelper writer) throws IOException;
+    abstract WriterHelper toString(AbstractStructure<?> structure, WriterHelper writer) throws IOException;
 }

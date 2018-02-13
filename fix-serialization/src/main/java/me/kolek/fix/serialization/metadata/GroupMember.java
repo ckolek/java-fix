@@ -23,7 +23,7 @@ public class GroupMember extends StructureMember {
     }
 
     @Override
-    void serialize(MetadataStructure<?> structure, List<TagValue> tagValues) {
+    void serialize(AbstractStructure<?> structure, List<TagValue> tagValues) {
         Group group = structure.getGroup(metadata.getNumInGroupField().getTagNum());
         if (group != null) {
             metadata.serialize(group, tagValues);
@@ -31,7 +31,7 @@ public class GroupMember extends StructureMember {
     }
 
     @Override
-    void getAllFieldValues(MetadataStructure<?> structure, List<FieldValue<?>> fieldValues) {
+    void getAllFieldValues(AbstractStructure<?> structure, List<FieldValue<?>> fieldValues) {
         Group group = structure.getGroup(metadata.getNumInGroupField().getTagNum());
         if (group != null) {
             metadata.getAllFieldValues(group, fieldValues);
@@ -39,7 +39,7 @@ public class GroupMember extends StructureMember {
     }
 
     @Override
-    WriterHelper toString(MetadataStructure<?> structure, WriterHelper writer) throws IOException {
+    WriterHelper toString(AbstractStructure<?> structure, WriterHelper writer) throws IOException {
         Group group = structure.getGroup(metadata.getNumInGroupField().getTagNum());
         if (group != null && !group.isEmpty()) {
             writer.write(metadata.getName()).write(':').newLine();

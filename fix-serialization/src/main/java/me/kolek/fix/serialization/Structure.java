@@ -9,7 +9,8 @@ import java.util.*;
 /**
  * @author ckolek
  */
-public abstract class Structure<MD extends StructureMetadata> extends MetadataStructure<MD> {
+public abstract class Structure<MD extends StructureMetadata> extends
+        AbstractStructure<MD> {
     private final Structure<?> parent;
 
     private final Map<String, Component> components;

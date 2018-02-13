@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * @author ckolek
  */
-public abstract class StructureMetadata<S extends MetadataStructure<?>> {
+public abstract class StructureMetadata<S extends AbstractStructure<?>> {
     private final long id;
     private final String name;
     private final List<StructureMember> members;
