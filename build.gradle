@@ -29,6 +29,7 @@ allprojects {
 
     signing {
         sign configurations.archives
+        required = System.env.containsKey 'CI'
     }
 
     uploadArchives {
@@ -85,6 +86,10 @@ subprojects {
         testCompile group: 'junit', name: 'junit', version: '4.12'
     }
 
+    configurations {
+        testOutput.extendsFrom(testCompile)
+    }
+
     jacoco {
         toolVersion = "0.7.9"
     }
@@ -103,6 +108,11 @@ subprojects {
         }
     }
 
+    task testJar(type: Jar, dependsOn: testClasses) {
+        classifier = 'test'
+        from sourceSets.test.output
+    }
+
     task sourcesJar(type: Jar) {
         classifier = 'sources'
         from sourceSets.main.allSource
@@ -115,5 +125,6 @@ subprojects {
 
     artifacts {
         archives javadocJar, sourcesJar
+        testOutput testJar
     }
 }

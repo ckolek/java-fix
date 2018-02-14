@@ -2,5 +2,6 @@ dependencies {
     compile project(':fix-core')
     compile group: 'me.kolek', name: 'util', version: '1.0.0-SNAPSHOT'
     compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
+    testCompile project(path: ':fix-core', configuration: 'testOutput')
     testCompile group: 'org.codehaus.groovy', name: 'groovy', version: '2.4.13'
 }
