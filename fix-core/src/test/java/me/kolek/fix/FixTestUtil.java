@@ -1,22 +1,31 @@
 package me.kolek.fix;
 
 import com.google.common.io.ByteProcessor;
+import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+import me.kolek.fix.util.FixMessageParser;
 import me.kolek.fix.util.FixUtil;
 import me.kolek.util.tuple.Tuple;
 import me.kolek.util.tuple.Tuple2;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 public class FixTestUtil {
+    private static final FixMessageParser PARSER = new FixMessageParser();
+
     public static URL getResource(Class<?> clazz, String name) {
         return Resources.getResource(clazz, name + ".fix");
     }
 
+    private static ByteSource getResourceByteSource(Class<?> clazz, String name) {
+        return Resources.asByteSource(getResource(clazz, name));
+    }
+
     public static byte[] getResourceData(Class<?> clazz, String name) throws IOException {
-        return Resources.asByteSource(getResource(clazz, name)).read(new ByteProcessor<byte[]>() {
+        return getResourceByteSource(clazz, name).read(new ByteProcessor<byte[]>() {
             private final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
             @Override
@@ -59,6 +68,12 @@ public class FixTestUtil {
             throw new IOException("unexpected message content after CheckSum");
         }
         return new String[]{beginString.first(), body, checkSum.first()};
+    }
+
+    public static FixMessage getResourceMessage(Class<?> clazz, String name) throws IOException {
+        try (InputStream stream = getResourceByteSource(clazz, name).openStream()) {
+            return PARSER.parse(stream);
+        }
     }
 
     private static Tuple2<String, Integer> readFieldValue(String messageString, int index, String fieldStart)
