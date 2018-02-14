@@ -1,5 +1,6 @@
 package me.kolek.fix.serialization.metadata;
 
+import me.kolek.fix.FixMessage;
 import me.kolek.fix.serialization.Message;
 import me.kolek.util.exception.CannotHappenException;
 import me.kolek.util.io.WriterHelper;
@@ -26,6 +27,10 @@ public class MessageMetadata extends StructureMetadata<Message> {
     @Override
     public Message newStructure() {
         return new Message(this);
+    }
+
+    public Message deserialize(FixMessage message) {
+        return super.deserialize(message.getTagValues());
     }
 
     @Override
