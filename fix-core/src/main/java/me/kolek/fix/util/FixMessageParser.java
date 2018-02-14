@@ -20,6 +20,10 @@ public class FixMessageParser {
     private final FixDictionary.Version dictionary;
     private final ThreadLocal<ByteArrayOutputStream> buffers;
 
+    public FixMessageParser() {
+        this(null);
+    }
+
     public FixMessageParser(FixDictionary.Version dictionary) {
         this.dictionary = dictionary;
         this.buffers = ThreadLocal.withInitial(ByteArrayOutputStream::new);
@@ -41,7 +45,7 @@ public class FixMessageParser {
         int length = -1;
         while ((tagNum = parseTagNum(inputStream)) != Integer.MIN_VALUE) {
             value = parseValue(inputStream, length);
-            if (dictionary.getField(tagNum).getType() == FieldType.LENGTH) {
+            if (dictionary != null && dictionary.getField(tagNum).getType() == FieldType.LENGTH) {
                 length = Integer.parseInt(value);
             } else {
                 length = -1;
