@@ -1492,5 +1492,4 @@ public enum Field {
     public FieldType type() {
         return type;
     }
-
 }

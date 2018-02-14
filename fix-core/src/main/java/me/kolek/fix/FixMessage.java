@@ -2,6 +2,7 @@ package me.kolek.fix;
 
 import me.kolek.fix.constants.TagNum;
 import me.kolek.fix.util.FixUtil;
+import me.kolek.util.ObjectUtil;
 
 import java.io.Serializable;
 import java.util.*;
@@ -155,5 +156,15 @@ public class FixMessage implements Iterable<TagValue>, Serializable {
     @Override
     public String toString() {
         return FixUtil.toString(tagValues);
+    }
+
+    @Override
+    public int hashCode() {
+        return tagValues.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ObjectUtil.equals(this, obj, FixMessage::getTagValues);
     }
 }

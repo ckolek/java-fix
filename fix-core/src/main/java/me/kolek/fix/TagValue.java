@@ -2,8 +2,10 @@ package me.kolek.fix;
 
 import com.google.common.base.Strings;
 import me.kolek.fix.util.FixUtil;
+import me.kolek.util.ObjectUtil;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class TagValue implements Serializable {
     public static final char SEPARATOR = '=';
@@ -30,5 +32,16 @@ public class TagValue implements Serializable {
     @Override
     public String toString() {
         return FixUtil.toString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tagNum, value);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ObjectUtil.equals(this, obj,
+                (self, other) -> other.tagNum == self.tagNum && Objects.equals(other.value, self.value));
     }
 }
